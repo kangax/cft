@@ -1,0 +1,10 @@
+body { font-family: Optima, Arial, serif; }
+table { text-align: left; border-collapse: collapse; }
+th { background-color: #555; color: #eee; padding: 5px 10px; font-weight: normal; border: 1px solid #eee; }
+td.name { text-align: right; padding-right: 10px; width: 400px; }
+td.true { background-color: #5f5; }
+td.false { background-color: #f55; }
+td.N\/A { background-color: yellow; }
+td { border: 1px solid #aaa; padding: 5px; vertical-align: top; }
+dl { margin-left: 1em; }
+h1 { background: #fee; }
