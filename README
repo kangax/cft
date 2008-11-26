@@ -1,0 +1,1 @@
+Common Feature Tests (CFT) aims to provide a convenient set of feature tests (duh!) for Javascript. It eliminates a need for browser sniffing, providing a much more robust way to work around environment quirks.
