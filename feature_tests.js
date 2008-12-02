@@ -50,9 +50,13 @@ SOFTWARE.
   (function(){
     var elForm = document.createElement('form');
     var elInput = document.createElement('input');
+    var root = document.documentElement;
     elInput.setAttribute('name', 'test');
     elForm.appendChild(elInput);
+    // Older Safari (e.g. 2.0.2) populates "elements" collection only when form is within a document
+    root.appendChild(elForm);
     bugs.SETATTRIBUTE_IGNORES_NAME_ATTRIBUTE = (typeof elForm.elements['test'] == 'undefined');
+    root.removeChild(elForm);
     elForm = elInput = null;
   })();
   
