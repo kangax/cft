@@ -14,6 +14,7 @@
       Too many times I see Javascript authors fail into the trap of browser sniffing.
       Feature detection is known to be a much better practice when it comes to creating robust scripts for general web.
       Hopefully, this collection can serve as a repository of most common (non-trivial) feature tests.
+      None of the tests require presence of <code>document.body</code> and so can be run at any time.
       <br>
       <br>
       Found an error or have a suggestion? 
@@ -25,7 +26,7 @@
         <tr>
           <th>Name</th>
           <th>Value</th>
-          <th>Browser</th>
+          <th>Affected Browsers</th>
           <th>Info</th>
         </tr>
       </thead>
@@ -43,13 +44,66 @@
         <tr>
           <td>IS_TRANSFORMATION_SUPPORTED</td>
           <td></td>
-          <td>Chrome, FF3.1+</td>
+          <td>Chrome, Firefox 3.1+</td>
           <td>
             <a href="http://webkit.org/specs/CSSVisualEffects/CSSTransforms.html">
               CSSTransforms specs
             </a>
           </td>
         </tr>
+        <tr>
+          <td>IS_TAGNAME_UPPERCASED</td>
+          <td></td>
+          <td>-</td>
+          <td>
+            <a href="https://developer.mozilla.org/en/DOM/element.tagName" title="element.tagName on MDC">
+              element.tagName on MDC
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td>ARRAY_PROTOTYPE_SLICE_CAN_CONVERT_NODELIST_TO_ARRAY</td>
+          <td></td>
+          <td>non-<abbr title="Internet Explorer">IE</abbr></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>EVENT_HANDLERS_ARE_FIFO</td>
+          <td></td>
+          <td>non-<abbr title="Internet Explorer">IE</abbr></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>WINDOW_EVAL_EVALUATES_IN_GLOBAL_SCOPE</td>
+          <td></td>
+          <td>Firefox, Safari 3.2.1, Opera</td>
+          <td>Test whether `window.eval` evaluates string in global context</td>
+        </tr>
+        <tr>
+          <td>IS_EVENT_METAKEY_PRESENT</td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>IS_DOM2_EVENT_INTERFACE_IMPLEMENTED</td>
+          <td></td>
+          <td>non-<abbr title="Internet Explorer">IE</abbr></td>
+          <td>Test whether `preventDefault` and `stopPropagation` methods are present on event object</td>
+        </tr>
+        <tr>
+          <td>IS_EVENT_SRCELEMENT_PRESENT</td>
+          <td></td>
+          <td><abbr title="Internet Explorer">IE</abbr>, Opera, Chrome, Safari 2+</td>
+          <td>Test whether `srcElement` is present on event object</td>
+        </tr>
+        <tr>
+          <td>ARGUMENTS_INSTANCEOF_ARRAY</td>
+          <td></td>
+          <td>Opera</td>
+          <td></td>
+        </tr>
+        
       </tbody>
     </table>
     
