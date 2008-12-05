@@ -16,7 +16,7 @@
     IS_TRANSFORMATION_SUPPORTED: 'Chrome, FF3.1+',
     DOCUMENT_GETELEMENTBYID_CONFUSES_IDS_WITH_NAMES: 'IE <=7',
     DOCUMENT_GETELEMENTBYID_IGNORES_CASE: 'IE <=7',
-    WINDOW_EVAL_EVALUATES_IN_GLOBAL_SCOPE: 'Firefox, Safari 3.2.1'
+    WINDOW_EVAL_EVALUATES_IN_GLOBAL_SCOPE: 'Firefox, Safari 3.2.1, Opera 9.5+'
   }
   function createElement(element, text) {
     var element = document.createElement(element);
