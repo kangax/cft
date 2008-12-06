@@ -8,3 +8,4 @@ td.N\/A { background-color: yellow; }
 td { border: 1px solid #aaa; padding: 5px; vertical-align: top; }
 dl { margin-left: 1em; }
 h1 { background: #fee; }
+#last-updated { position: absolute; top: 33px; right: 20px; background: #ffc; border-bottom: 1px dotted #aaa; padding: 0 3px; font-size: 13px; }

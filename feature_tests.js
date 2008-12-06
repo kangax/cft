@@ -190,6 +190,14 @@ SOFTWARE.
     return null;
   })();
   
+  bugs.IS_STRING_PROTOTYPE_REPLACE_REGEXP_BUGGY = (function(){
+    var s = 'a_b';
+    if (s.split) {
+      return s.split(/(_)/).length !== 3;
+    }
+    return null;
+  })();
+  
   bugs.NEWLINES_IGNORED_AS_INNERHTML_OF_PRE_ELEMENT = (function(){
     var element = document.createElement('pre'), 
         isIgnored = false;
