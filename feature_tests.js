@@ -182,6 +182,14 @@ SOFTWARE.
     return true;
   })();
   
+  bugs.IS_REGEXP_WHITESPACE_CHARACTER_CLASS_BUGGY = (function(){
+    var s = "\x09\x0B\x0C\x20\xA0\x0A\x0D\u2028\u2029";
+    if (s.replace) {
+      return s.replace(/\s+/, '').length !== 0;
+    }
+    return null;
+  })();
+  
   bugs.NEWLINES_IGNORED_AS_INNERHTML_OF_PRE_ELEMENT = (function(){
     var element = document.createElement('pre'), 
         isIgnored = false;

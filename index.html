@@ -103,6 +103,15 @@
           <td>Opera</td>
           <td></td>
         </tr>
+        <tr>
+          <td>IS_REGEXP_WHITESPACE_CHARACTER_CLASS_BUGGY</td>
+          <td></td>
+          <td>IE</td>
+          <td>
+            Test whether /\s/ matches whitespace characters (\t,\v,\f, etc.)
+            (See <a href="http://bclary.com/2004/11/07/#a-15.10.2.12" title="ECMA-262 15.10.2.12">15.10.2.12</a>)
+          </td>
+        </tr>
         
       </tbody>
     </table>
@@ -113,7 +122,8 @@
       var table = document.getElementById('cft-data');
       var rows = table.tBodies[0].rows;
       for (var i=0, len=rows.length; i<len; i++) {
-        var testResult = __features[rows[i].cells[0].innerHTML];
+        var name = rows[i].cells[0].innerHTML;
+        var testResult = name in __features ? __features[name] : __bugs[name];
         rows[i].cells[1].appendChild(document.createTextNode((testResult + '').toUpperCase()))
         rows[i].cells[1].className = testResult;
       }
