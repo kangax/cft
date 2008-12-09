@@ -176,7 +176,7 @@ SOFTWARE.
     return ('a'.replace('a', function(){ return '' }).length !== 0);
   })();
   
-  bugs.ARRAY_PROTOTYPE_CONCAT_ARGUMENTS_BUGGY = (function(){
+  bugs.ARRAY_PROTOTYPE_CONCAT_ARGUMENTS_BUGGY = (bugs.__ARRAY_PROTOTYPE_CONCAT_ARGUMENTS_BUGGY = function(){
     if (arguments instanceof Array) {
       return [].concat(arguments)[0] !== 1;
     }
