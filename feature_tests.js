@@ -30,24 +30,27 @@ SOFTWARE.
   var bugs = { };
   
   // Safari returns "function" as typeof HTMLCollection
-  (function(){
-    features.TYPEOF_NODELIST_IS_FUNCTION = (typeof document.getElementsByTagName('*') == 'function');
+  bugs.TYPEOF_NODELIST_IS_FUNCTION = (bugs.__TYPEOF_NODELIST_IS_FUNCTION = function(){
+     return (typeof document.getElementsByTagName('*') == 'function');
   })();
 
   // IE returns comment nodes in getElementsByTagName results
-  (function(){
-    if (isHostMethod(document, 'createElement')) {
+  bugs.GETELEMENTSBYTAGNAME_RETURNS_COMMENT_NODES = (bugs.__GETELEMENTSBYTAGNAME_RETURNS_COMMENT_NODES = function(){
+    if (document.createElement) {
       var el = document.createElement('div');
+      var buggy = false;
       el.innerHTML = '<span>a</span><!--b-->';
       var lastNode = el.getElementsByTagName('*')[1];
-      bugs.GETELEMENTSBYTAGNAME_RETURNS_COMMENT_NODES = !!(lastNode && lastNode.nodeType === 8);
+      buggy = !!(lastNode && lastNode.nodeType === 8);
       el = lastNode = null;
+      return buggy;
     }
+    return null;
   })();
   
   // name attribute can not be set at run time in IE
   // http://msdn.microsoft.com/en-us/library/ms536389.aspx
-  (function(){
+  (bugs.__SETATTRIBUTE_IGNORES_NAME_ATTRIBUTE = function(){
     var elForm = document.createElement('form');
     var elInput = document.createElement('input');
     var root = document.documentElement;
@@ -60,40 +63,45 @@ SOFTWARE.
     elForm = elInput = null;
   })();
   
-  (function(){
-    var el = document.createElement('div');
+  bugs.ELEMENT_PROPERTIES_ARE_ATTRIBUTES = (bugs.__ELEMENT_PROPERTIES_ARE_ATTRIBUTES = function(){
+    var el = document.createElement('div'), 
+        buggy = false;
     el.__foo = 'bar';
-    bugs.ELEMENT_PROPERTIES_ARE_ATTRIBUTES = (el.getAttribute('__foo') === 'bar');
+    buggy = (el.getAttribute('__foo') === 'bar');
     el = null;
+    return buggy;
   })();
   
-  (function(){
+  features.IS_TRANSFORMATION_SUPPORTED = (features.__IS_TRANSFORMATION_SUPPORTED = function(){
     var el = document.createElement('div');
-    features.IS_TRANSFORMATION_SUPPORTED = ('WebkitTransform' in el.style) || ('MozTransform' in el.style);
+    var isSupported = ('WebkitTransform' in el.style) || ('MozTransform' in el.style);
     el = null;
+    return isSupported;
   })();
   
-  features.IS_TAGNAME_UPPERCASED = /[A-Z]/.test(document.documentElement.tagName);
+  features.IS_TAGNAME_UPPERCASED = (features.__IS_TAGNAME_UPPERCASED = function(){
+    return /[A-Z]/.test(document.documentElement.tagName);
+  })();
   
-  (function(){
+  bugs.QUERY_SELECTOR_IGNORES_CAPITALIZED_VALUES = (bugs.__QUERY_SELECTOR_IGNORES_CAPITALIZED_VALUES = function(){
     var el = document.createElement('div'),
-        el2 = document.createElement('span');
+        el2 = document.createElement('span'),
+        isBuggy = false;
     el2.className = 'Test';
     el.appendChild(el2);
-    bugs.QUERY_SELECTOR_IGNORES_CAPITALIZED_VALUES = ('querySelector' in el)
-      ? (el.querySelector('.Test') !== null) 
-      : null;
+    isBuggy = ('querySelector' in el) ? (el.querySelector('.Test') !== null) : null;
     el = el2 = null;
+    return isBuggy;
   })();
   
-  features.ARRAY_PROTOTYPE_SLICE_CAN_CONVERT_NODELIST_TO_ARRAY = (function(){
+  features.ARRAY_PROTOTYPE_SLICE_CAN_CONVERT_NODELIST_TO_ARRAY = (features.__ARRAY_PROTOTYPE_SLICE_CAN_CONVERT_NODELIST_TO_ARRAY = function(){
     try {
       return (Array.prototype.slice.call(document.forms, 0) instanceof Array);
     } catch(e) { };
     return false;
   })();
   
-  features.EVENT_HANDLERS_ARE_FIFO = (function(){
+  features.EVENT_HANDLERS_ARE_FIFO = (features.__EVENT_HANDLERS_ARE_FIFO = function(){
     function addEvent(element, name, handler) {
       if (element.addEventListener) {
         element.addEventListener(name, handler, false);
@@ -101,7 +109,7 @@ SOFTWARE.
       else if (element.attachEvent) {
         element.attachEvent("on" + name, handler);
       }
-    };
+    }
     function removeEvent(element, name, handler) {
       if (element.removeEventListener) {
         element.removeEventListener(name, handler, false);
@@ -109,13 +117,13 @@ SOFTWARE.
       else if (element.detachEvent) {
         element.detachEvent("on" + name, handler);
       }
-    };
+    }
     function handler1() {
       a.push(1);
-    };
+    }
     function handler2() {
       a.push(2);
-    };
+    }
     var f = document.createElement('form'), a = [];
     f.action = '';
     addEvent(f, 'reset', handler1);
@@ -127,7 +135,7 @@ SOFTWARE.
     return (a[0] === 1);
   })();
   
-  features.WINDOW_EVAL_EVALUATES_IN_GLOBAL_SCOPE = (function(){
+  features.WINDOW_EVAL_EVALUATES_IN_GLOBAL_SCOPE = (features.__WINDOW_EVAL_EVALUATES_IN_GLOBAL_SCOPE = function(){
     var fnId = '__eval' + Number(new Date()),
         passed = false;
         
@@ -164,7 +172,9 @@ SOFTWARE.
     }
   })();
   
-  bugs.STRING_PROTOTYPE_REPLACE_IGNORES_FUNCTIONS = ('a'.replace('a', function(){ return '' }).length !== 0);
+  bugs.STRING_PROTOTYPE_REPLACE_IGNORES_FUNCTIONS = (bugs.__STRING_PROTOTYPE_REPLACE_IGNORES_FUNCTIONS = function(){
+    return ('a'.replace('a', function(){ return '' }).length !== 0);
+  })();
   
   bugs.ARRAY_PROTOTYPE_CONCAT_ARGUMENTS_BUGGY = (function(){
     if (arguments instanceof Array) {
@@ -173,16 +183,18 @@ SOFTWARE.
     return null;
   })(1,2);
   
-  features.ARGUMENTS_INSTANCEOF_ARRAY = (function(){ return arguments instanceof Array; })();
+  features.ARGUMENTS_INSTANCEOF_ARRAY = (features.__ARGUMENTS_INSTANCEOF_ARRAY = function(){ 
+    return arguments instanceof Array;
+  })();
   
-  bugs.PROPERTIES_SHADOWING_SAMENAMED_DONTENUM_ONES_ARE_ENUMERABLE = (function(){
+  bugs.PROPERTIES_SHADOWING_DONTENUM_ARE_ENUMERABLE = (bugs.__PROPERTIES_SHADOWING_DONTENUM_ARE_ENUMERABLE = function(){
     for (var prop in { toString: true }) {
       return false;
     }
     return true;
   })();
   
-  bugs.IS_REGEXP_WHITESPACE_CHARACTER_CLASS_BUGGY = (function(){
+  bugs.IS_REGEXP_WHITESPACE_CHARACTER_CLASS_BUGGY = (bugs.__IS_REGEXP_WHITESPACE_CHARACTER_CLASS_BUGGY = function(){
     var s = "\x09\x0B\x0C\x20\xA0\x0A\x0D\u2028\u2029";
     if (s.replace) {
       return s.replace(/\s+/, '').length !== 0;
@@ -190,7 +202,7 @@ SOFTWARE.
     return null;
   })();
   
-  bugs.IS_STRING_PROTOTYPE_REPLACE_REGEXP_BUGGY = (function(){
+  bugs.IS_STRING_PROTOTYPE_REPLACE_REGEXP_BUGGY = (bugs.__IS_STRING_PROTOTYPE_REPLACE_REGEXP_BUGGY = function(){
     var s = 'a_b';
     if (s.split) {
       return s.split(/(_)/).length !== 3;
@@ -198,19 +210,21 @@ SOFTWARE.
     return null;
   })();
   
-  bugs.NEWLINES_IGNORED_AS_INNERHTML_OF_PRE_ELEMENT = (function(){
-    var element = document.createElement('pre'), 
-        isIgnored = false;
-    if (element) {
-      element.innerHTML = 'a\nb';
-      isIgnored = (element.innerHTML.charAt(1) !== '\n');
-      element = null;
-      return isIgnored;
-    }
-    return null;
+  bugs.PRE_ELEMENTS_IGNORE_NEWLINES = (bugs.__PRE_ELEMENTS_IGNORE_NEWLINES = function(){
+    var el = document.createElement('pre');
+    var root = document.documentElement;
+    el.appendChild(document.createTextNode('xx'));
+    root.appendChild(el);
+    var initialHeight = el.offsetHeight;
+    el.firstChild.nodeValue = 'x\nx';
+    // check if `offsetHeight` changed after adding '\n' to the value
+    var isIgnored = (el.offsetHeight === initialHeight);
+    root.removeChild(el);
+    el = null;
+    return isIgnored;
   })();
   
-  bugs.SELECT_ELEMENT_INNERHTML_BUGGY = (function(){
+  bugs.SELECT_ELEMENT_INNERHTML_BUGGY = (bugs.__SELECT_ELEMENT_INNERHTML_BUGGY = function(){
     var el = document.createElement('select'), 
         isBuggy = true;
     if (el) {
@@ -224,7 +238,7 @@ SOFTWARE.
     return null;
   })();
   
-  bugs.TABLE_ELEMENT_INNERHTML_BUGGY = (function(){
+  bugs.TABLE_ELEMENT_INNERHTML_BUGGY = (bugs.__TABLE_ELEMENT_INNERHTML_BUGGY = function(){
     var isBuggy = true;
     try {
       var el = document.createElement('table');
@@ -240,7 +254,7 @@ SOFTWARE.
     return null;
   })();
   
-  bugs.SCRIPT_ELEMENT_REJECTS_TEXTNODE_APPENDING = (function(){
+  bugs.SCRIPT_ELEMENT_REJECTS_TEXTNODE_APPENDING = (bugs.__SCRIPT_ELEMENT_REJECTS_TEXTNODE_APPENDING = function(){
     var s = document.createElement('script'), 
         passed = false;
     try {
@@ -251,7 +265,7 @@ SOFTWARE.
     return !passed;
   })();
   
-  bugs.DOCUMENT_GETELEMENTBYID_CONFUSES_IDS_WITH_NAMES = (function(){
+  bugs.DOCUMENT_GETELEMENTBYID_CONFUSES_IDS_WITH_NAMES = (bugs.__DOCUMENT_GETELEMENTBYID_CONFUSES_IDS_WITH_NAMES = function(){
     
     // need to feature test all these DOM methods before calling them
     var num = Number(new Date()),
@@ -275,7 +289,7 @@ SOFTWARE.
     return isBuggy;
   })();
   
-  bugs.DOCUMENT_GETELEMENTBYID_IGNORES_CASE = (function(){
+  bugs.DOCUMENT_GETELEMENTBYID_IGNORES_CASE = (bugs.__DOCUMENT_GETELEMENTBYID_IGNORES_CASE = function(){
     var el = document.createElement('script'),
         head = document.getElementsByTagName('head')[0];
     el.type = 'text/javascript';
@@ -289,5 +303,4 @@ SOFTWARE.
 
   this.__features = features;
   this.__bugs = bugs;
-  
 })();

@@ -1,89 +1,134 @@
 (function(){
-  var map = {
-    TYPEOF_NODELIST_IS_FUNCTION: 'Safari 2+',
-    ARGUMENTS_INSTANCEOF_ARRAY: 'Opera',
-    PROPERTIES_SHADOWING_SAMENAMED_DONTENUM_ONES_ARE_ENUMERABLE: '<=IE6',
-    STRING_PROTOTYPE_REPLACE_IGNORES_FUNCTIONS: 'Safari <=2.0.2',
-    ELEMENT_PROPERTIES_ARE_ATTRIBUTES: 'IE',
-    SETATTRIBUTE_IGNORES_NAME_ATTRIBUTE: 'IE <=7',
-    GETELEMENTSBYTAGNAME_RETURNS_COMMENT_NODES: 'IE',
-    NEWLINES_IGNORED_AS_INNERHTML_OF_PRE_ELEMENT: 'IE',
-    ARRAY_PROTOTYPE_CONCAT_ARGUMENTS_BUGGY: 'Opera <9.5',
-    SELECT_ELEMENT_INNERHTML_BUGGY: 'IE',
-    TABLE_ELEMENT_INNERHTML_BUGGY: 'IE',
-    SCRIPT_ELEMENT_REJECTS_TEXTNODE_APPENDING: 'IE',
-    IS_EVENT_SRCELEMENT_PRESENT: 'IE, Opera, Chrome, Safari 2+',
-    IS_TRANSFORMATION_SUPPORTED: 'Chrome, Firefox 3.1+',
-    DOCUMENT_GETELEMENTBYID_CONFUSES_IDS_WITH_NAMES: 'IE <=7',
-    DOCUMENT_GETELEMENTBYID_IGNORES_CASE: 'IE <=7',
-    WINDOW_EVAL_EVALUATES_IN_GLOBAL_SCOPE: 'Firefox, Safari 3.2.1, Opera 9.5+'
-  }
-  function createElement(element, text) {
-    var element = document.createElement(element);
-    if (typeof text != 'undefined') {
-      element.appendChild(document.createTextNode(text));
+  
+  if (!('getElementsByClassName' in document)) {
+    document.getElementsByClassName = function(className) {
+      var all = document.getElementsByTagName('*');
+      if (!className) return all;
+      var re = new RegExp('(^|\\s)' + className + '(\\s|$)');
+      var result = [];
+      for (var i=0, len=all.length; i<len; i++) {
+        if (re.test(all[i].className)) {
+          result.push(all[i]);
+        }
+      }
+      return result;
     }
-    return element;
   }
   
-  function printTable(data, caption) {
-    var tableElement = document.createElement('table');
-    var tbodyElement = document.createElement('tbody');
-    var theadElement = document.createElement('thead');
-
-    var trElement, value;
-
-    var header = createElement('h2', caption);
-    document.body.appendChild(header);
-
-    for (var prop in data) {
-      trElement = document.createElement('tr');
-
-      tdNameElement = createElement('td', prop);
-      tdNameElement.className = 'name';
-
-      value = String(data[prop] === null ? 'N/A' : data[prop]);
-      tdValueElement = createElement('td', value.toUpperCase());
-      tdValueElement.className = value;
-      
-      value = map[prop] || '';
-      tdBrowserElement = createElement('td', value);
-
-      trElement.appendChild(tdNameElement);
-      trElement.appendChild(tdValueElement);
-      trElement.appendChild(tdBrowserElement);
-
-      tbodyElement.appendChild(trElement);
-    }
-    
-    var thName = createElement('th', 'Name');
-    var thValue = createElement('th', 'Value');
-    var thBrowser = createElement('th', 'Affected browsers');
-    
-    theadElement.appendChild(thName);
-    theadElement.appendChild(thValue);
-    theadElement.appendChild(thBrowser);
-    
-    tableElement.appendChild(theadElement);
-    tableElement.appendChild(tbodyElement);
-    
-    document.body.appendChild(tableElement);
-  }
-  
-  // printTable(this.__features, 'Features:');
-  printTable(this.__bugs, 'Bugs:');
-  
-})();
-
-(function(){
-  var valueCell, codeCell
-  for (var prop in this.__features) {
-    if (valueCell = document.getElementById('__' + prop)) {
-      valueCell.appendChild(document.createTextNode(this.__features[prop]));
-      valueCell.className = String(this.__features[prop]);
-      if (codeCell = document.getElementById('__' + prop + '__code')) {
-        codeCell.appendChild(document.createTextNode(this.__features[prop]))
+  function toggleCodeSection(trigger, action) {
+    var parent = trigger.parentNode, firstCell, testName;
+    if (parent) {
+      parent = parent.parentNode;
+      if (parent) {
+        firstCell = parent.childNodes[1];
+        if (firstCell) {
+          testName = firstCell.firstChild.nodeValue;
+        }
       }
     }
+    if (testName && parent) {
+      var next = parent.nextSibling;
+      while (next && next.nodeType !== 1) {
+        next = next.nextSibling;
+      }
+      if (!next) return;
+      
+      if (typeof action !== 'undefined') {
+        if (action === 'hide') {
+          next.style.display = 'none';
+          trigger.firstChild.nodeValue = 'show';
+          parent.style.backgroundColor = '';
+        }
+        else if (action === 'show') {
+          next.style.display = '';
+          trigger.firstChild.nodeValue = 'hide';
+          parent.style.backgroundColor = '#ffc';
+        }
+        return;
+      }
+      
+      if (next.style.display === 'none') {
+        next.style.display = '';
+        trigger.firstChild.nodeValue = 'hide';
+        parent.style.backgroundColor = '#ffc';
+      }
+      else if (next.style.display !== 'none') {
+        next.style.display = 'none';
+        trigger.firstChild.nodeValue = 'show';
+        parent.style.backgroundColor = '';
+      }
+    }
+  }
+  
+  
+  function populateTable(tbl) {
+    var table = document.getElementById(tbl);
+    var rows = table.tBodies[0].rows;
+    for (var i=0, len=rows.length; i<len; i++) {
+      var name = rows[i].cells[0].innerHTML;
+      var testResult = name in __features ? __features[name] : __bugs[name];
+      var value = String(testResult === null ? 'N/A' : testResult)
+      if (rows[i].cells[1]) {
+        rows[i].cells[1].appendChild(document.createTextNode((value + '').toUpperCase()));
+        rows[i].cells[1].className = value;
+      }
+      var next = rows[i].nextSibling;
+      while (next && next.nodeType !== 1) {
+        next = next.nextSibling;
+      }
+      if (!next) return;
+      var cell = next.cells[0];
+      if (!cell) return;
+      var placeholder = cell.getElementsByTagName('pre')[0];
+      if (!placeholder) return;
+      name = ('__' + name);
+      var value = name in __features ? __features[name] : __bugs[name];
+      // transform leading 4 spaces to 2
+      value = (value + '').replace(/\n  /g, '\n');
+      if (__bugs.PRE_ELEMENTS_IGNORE_NEWLINES) {
+        value = value.replace(/\n/g, '\n\r');
+      }
+
+      placeholder.appendChild(document.createTextNode(value));
+      i++;
+    }
+  };
+
+  populateTable('cft-data');
+  populateTable('cft-data-bugs');
+  
+  document.documentElement.onclick = function(e) {
+    if (!e) e = window.event;
+    if (!e) return;
+    var target = ('target' in e) ? e.target : e.srcElement;
+    
+    if (target && /^a$/i.test(target.nodeName)) {
+      if (target.className === 'show-test-code') {
+        toggleCodeSection(target);
+      }
+      else if (target.className === 'show-all') {
+        var all = document.getElementsByClassName('show-test-code');
+        for (var i=0, len=all.length; i<len; i++) {
+          toggleCodeSection(all[i], 'show');
+        }
+      }
+      else if (target.className === 'hide-all') {
+        var all = document.getElementsByClassName('show-test-code');
+        for (var i=0, len=all.length; i<len; i++) {
+          toggleCodeSection(all[i], 'hide');
+        }
+      }
+      else {
+        return true;
+      }
+      if (e.preventDefault) {
+        e.preventDefault();
+      }
+      if (e.stopPropagation) {
+        e.stopPropagation();
+      }
+      return false;
+    }
+    return true;
   }
 })();
