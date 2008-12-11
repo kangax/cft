@@ -21,6 +21,8 @@ SOFTWARE.
 
 (function(){
   
+  var t = new Date();
+  
   function isHostMethod(o, m) {
     var t = typeof(o[m]);
     return t == 'function' || !!(t == 'object' && o[m]) || t == 'unknown';
@@ -316,6 +318,8 @@ SOFTWARE.
     el = null;
     return buggy;
   })();
+  
+  this.__totalTime = (new Date() - t);
 
   this.__features = features;
   this.__bugs = bugs;

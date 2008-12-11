@@ -131,4 +131,11 @@
     }
     return true;
   }
+  
+  if (document.body) {
+    var p = document.createElement('p');
+    p.className = 'total-time';
+    p.innerHTML = ('Finished all tests in: <strong>' + __totalTime + '</strong>ms');
+    document.body.appendChild(p);
+  }
 })();
