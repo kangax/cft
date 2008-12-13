@@ -19,38 +19,47 @@ SOFTWARE.
 
 */
 
-(function(){
+(function(__global){
   
   var t = new Date();
-  
-  function isHostMethod(o, m) {
-    var t = typeof(o[m]);
-    return t == 'function' || !!(t == 'object' && o[m]) || t == 'unknown';
-  };
   
   var features = { };
   var bugs = { };
   
   features.IS_TRANSFORMATION_SUPPORTED = (features.__IS_TRANSFORMATION_SUPPORTED = function(){
-    var el = document.createElement('div');
-    var isSupported = ('WebkitTransform' in el.style) || ('MozTransform' in el.style);
-    el = null;
-    return isSupported;
+    if (document.createElement) {
+      var el = document.createElement('div');
+      if (el && el.style) {
+        var isSupported = ('WebkitTransform' in el.style)
+          || ('MozTransform' in el.style);
+        el = null;
+        return isSupported;
+      }
+    }
+    return null;
   })();
   
-  features.IS_TAGNAME_UPPERCASED = (features.__IS_TAGNAME_UPPERCASED = function(){
-    return /[A-Z]/.test(document.documentElement.tagName);
+  features.IS_ELEMENT_TAGNAME_UPPERCASED = (features.__IS_ELEMENT_TAGNAME_UPPERCASED = function(){
+    var docEl = document.documentElement;
+    if (docEl && docEl.nodeName) {
+      return 'HTML' === docEl.nodeName;
+    }
+    return null;
   })();
   
   bugs.QUERY_SELECTOR_IGNORES_CAPITALIZED_VALUES = (bugs.__QUERY_SELECTOR_IGNORES_CAPITALIZED_VALUES = function(){
-    var el = document.createElement('div'),
-        el2 = document.createElement('span'),
-        isBuggy = false;
-    el2.className = 'Test';
-    el.appendChild(el2);
-    isBuggy = ('querySelector' in el) ? (el.querySelector('.Test') !== null) : null;
-    el = el2 = null;
-    return isBuggy;
+    if (document.createElement && (document.compatMode === 'BackCompat')) {
+      var el = document.createElement('div'),
+          el2 = document.createElement('span');
+      if (el && el2 && el.appendChild && el.querySelector) {
+        el2.className = 'Test';
+        el.appendChild(el2);
+        var isBuggy = (el.querySelector('.Test') !== null);
+        el = el2 = null;
+        return isBuggy;
+      }
+    }
+    return null;
   })();
   
   features.ARRAY_PROTOTYPE_SLICE_CAN_CONVERT_NODELIST_TO_ARRAY = (features.__ARRAY_PROTOTYPE_SLICE_CAN_CONVERT_NODELIST_TO_ARRAY = function(){
@@ -136,74 +145,108 @@ SOFTWARE.
   })();
   
   features.IS_NATIVE_HAS_ATTRIBUTE_PRESENT = (features.__IS_NATIVE_HAS_ATTRIBUTE_PRESENT = function(){
-    var i = document.createElement('iframe'),
-        root = document.documentElement,
-        frames = window.frames;
-        
-    i.style.display = 'none';
-    root.appendChild(i);
-    frames[frames.length-1].document.write('<html><head><title></title></head><body></body></html>');
-    var isPresent = ('hasAttribute' in frames[frames.length-1].document.documentElement);
-    root.removeChild(i);
-    i = null;
-    return isPresent;
+    if (document.createElement) {
+      var i = document.createElement('iframe'),
+          root = document.documentElement,
+          frames = window.frames;
+      if (root && root.appendChild && root.removeChild) {
+        i.style.display = 'none';
+        root.appendChild(i);
+        var doc = frames[frames.length-1].document;
+        if (doc && doc.write) {
+          doc.write('<html><head><title></title></head><body></body></html>');
+          var isPresent = doc.documentElement ? ('hasAttribute' in doc.documentElement) : null;
+          root.removeChild(i);
+          i = null;
+          return isPresent;
+        }
+      }
+    }
+    return null;
   })();
   
   // BUGGIES
   
   // Safari returns "function" as typeof HTMLCollection
+  // test for typeof DOM1 `document.forms` (if exists)
   bugs.TYPEOF_NODELIST_IS_FUNCTION = (bugs.__TYPEOF_NODELIST_IS_FUNCTION = function(){
-     return (typeof document.getElementsByTagName('*') == 'function');
+    if (document.forms) {
+      return (typeof document.forms == 'function');
+    }
+    return null;
   })();
 
-  // IE returns comment nodes in getElementsByTagName results
+  // IE returns comment nodes as part of `getElementsByTagName` results
   bugs.GETELEMENTSBYTAGNAME_RETURNS_COMMENT_NODES = (bugs.__GETELEMENTSBYTAGNAME_RETURNS_COMMENT_NODES = function(){
     if (document.createElement) {
       var el = document.createElement('div');
-      var buggy = false;
-      el.innerHTML = '<span>a</span><!--b-->';
-      var lastNode = el.getElementsByTagName('*')[1];
-      buggy = !!(lastNode && lastNode.nodeType === 8);
-      el = lastNode = null;
-      return buggy;
+      if (el && el.getElementsByTagName) {
+        el.innerHTML = '<span>a</span><!--b-->';
+        var lastNode = el.getElementsByTagName('*')[1];
+        var buggy = !!(lastNode && lastNode.nodeType === 8);
+        el = lastNode = null;
+        return buggy;
+      }
     }
     return null;
   })();
   
   // name attribute can not be set at run time in IE
   // http://msdn.microsoft.com/en-us/library/ms536389.aspx
-  (bugs.__SETATTRIBUTE_IGNORES_NAME_ATTRIBUTE = function(){
-    var elForm = document.createElement('form');
-    var elInput = document.createElement('input');
-    var root = document.documentElement;
-    elInput.setAttribute('name', 'test');
-    elForm.appendChild(elInput);
-    // Older Safari (e.g. 2.0.2) populates "elements" collection only when form is within a document
-    root.appendChild(elForm);
-    bugs.SETATTRIBUTE_IGNORES_NAME_ATTRIBUTE = (typeof elForm.elements['test'] == 'undefined');
-    root.removeChild(elForm);
-    elForm = elInput = null;
+  bugs.SETATTRIBUTE_IGNORES_NAME_ATTRIBUTE = (bugs.__SETATTRIBUTE_IGNORES_NAME_ATTRIBUTE = function(){
+    if (document.createElement) {
+      var elForm = document.createElement('form');
+      var elInput = document.createElement('input');
+      var root = document.documentElement;
+      if (elForm && 
+          elInput && 
+          elInput.setAttribute && 
+          elForm.appendChild && 
+          root && 
+          root.appendChild && 
+          root.removeChild) {
+        elInput.setAttribute('name', 'test');
+        elForm.appendChild(elInput);
+        // Older Safari (e.g. 2.0.2) populates "elements" collection only when form is within a document
+        root.appendChild(elForm);
+        var isBuggy = elForm.elements ? (typeof elForm.elements['test'] == 'undefined') : null;
+        root.removeChild(elForm);
+        elForm = elInput = null;
+        return isBuggy;
+      }
+    }
+    return null;
   })();
   
   bugs.ELEMENT_PROPERTIES_ARE_ATTRIBUTES = (bugs.__ELEMENT_PROPERTIES_ARE_ATTRIBUTES = function(){
-    var el = document.createElement('div'), 
-        buggy = false;
-    el.__foo = 'bar';
-    buggy = (el.getAttribute('__foo') === 'bar');
-    el = null;
-    return buggy;
+    if (document.createElement) {
+      var el = document.createElement('div');
+      if (el && el.getAttribute) {
+        el.__foo = 'bar';
+        var buggy = (el.getAttribute('__foo') === 'bar');
+        el = null;
+        return buggy;
+      }
+    }
+    return null;
   })();
   
   bugs.STRING_PROTOTYPE_REPLACE_IGNORES_FUNCTIONS = (bugs.__STRING_PROTOTYPE_REPLACE_IGNORES_FUNCTIONS = function(){
-    return ('a'.replace('a', function(){ return '' }).length !== 0);
+    var s = 'a';
+    if (s.replace) {
+      return (s.replace(s, function(){ return '' }).length !== 0);
+    }
+    return null;
   })();
   
   bugs.ARRAY_PROTOTYPE_CONCAT_ARGUMENTS_BUGGY = (bugs.__ARRAY_PROTOTYPE_CONCAT_ARGUMENTS_BUGGY = function(){
-    if (arguments instanceof Array) {
-      return [].concat(arguments)[0] !== 1;
-    }
-    return null;
-  })(1,2);
+    return (function(){
+      if (arguments instanceof Array) {
+        return [].concat(arguments)[0] !== 1;
+      }
+      return null;
+    })(1,2);
+  })();
   
   bugs.PROPERTIES_SHADOWING_DONTENUM_ARE_ENUMERABLE = (bugs.__PROPERTIES_SHADOWING_DONTENUM_ARE_ENUMERABLE = function(){
     for (var prop in { toString: true }) {
@@ -229,29 +272,42 @@ SOFTWARE.
   })();
   
   bugs.PRE_ELEMENTS_IGNORE_NEWLINES = (bugs.__PRE_ELEMENTS_IGNORE_NEWLINES = function(){
-    var el = document.createElement('pre');
-    var root = document.documentElement;
-    el.appendChild(document.createTextNode('xx'));
-    root.appendChild(el);
-    var initialHeight = el.offsetHeight;
-    el.firstChild.nodeValue = 'x\nx';
-    // check if `offsetHeight` changed after adding '\n' to the value
-    var isIgnored = (el.offsetHeight === initialHeight);
-    root.removeChild(el);
-    el = null;
-    return isIgnored;
+    if (document.createElement && document.createTextNode) {
+      var el = document.createElement('pre');
+      var txt = document.createTextNode('xx');
+      var root = document.documentElement;
+      if (el && 
+          el.appendChild &&
+          txt && 
+          root && 
+          root.appendChild &&
+          root.removeChild) {
+        el.appendChild(txt);
+        root.appendChild(el);
+        var initialHeight = el.offsetHeight;
+        el.firstChild.nodeValue = 'x\nx';
+        // check if `offsetHeight` changed after adding '\n' to the value
+        var isIgnored = (el.offsetHeight === initialHeight);
+        root.removeChild(el);
+        el = txt = null;
+        return isIgnored;
+      }
+    }
+    return null;
   })();
   
   bugs.SELECT_ELEMENT_INNERHTML_BUGGY = (bugs.__SELECT_ELEMENT_INNERHTML_BUGGY = function(){
-    var el = document.createElement('select'), 
-        isBuggy = true;
-    if (el) {
-      el.innerHTML = '<option value="test">test<\/option>';
-      if (el.options[0]) {
-        isBuggy = el.options[0].nodeName.toLowerCase() !== 'option';
+    if (document.createElement) {
+      var el = document.createElement('select'), 
+          isBuggy = true;
+      if (el) {
+        el.innerHTML = '<option value="test">test<\/option>';
+        if (el.options && el.options[0]) {
+          isBuggy = el.options[0].nodeName.toUpperCase() !== 'OPTION';
+        }
+        el = null;
+        return isBuggy;
       }
-      el = null;
-      return isBuggy;
     }
     return null;
   })();
@@ -308,19 +364,25 @@ SOFTWARE.
   })();
   
   bugs.DOCUMENT_GETELEMENTBYID_IGNORES_CASE = (bugs.__DOCUMENT_GETELEMENTBYID_IGNORES_CASE = function(){
-    var el = document.createElement('script'),
-        head = document.getElementsByTagName('head')[0];
-    el.type = 'text/javascript';
-    el.id = 'A';
-    head.appendChild(el);
-    var buggy = !!document.getElementById('a');
-    head.removeChild(el);
-    el = null;
-    return buggy;
+    if (document.createElement && document.getElementsByTagName && document.getElementById) {
+      var el = document.createElement('script'),
+          head = document.getElementsByTagName('head')[0];
+      if (el && head && head.appendChild && head.removeChild) {
+        el.type = 'text/javascript';
+        el.id = 'A';
+        head.appendChild(el);
+        var buggy = !!document.getElementById('a');
+        head.removeChild(el);
+        el = null;
+        return buggy;
+      }
+    }
+    return null;
   })();
   
-  this.__totalTime = (new Date() - t);
+  __global.__totalTime = (new Date() - t);
 
-  this.__features = features;
-  this.__bugs = bugs;
-})();
+  __global.__features = features;
+  __global.__bugs = bugs;
+  
+})(this);
