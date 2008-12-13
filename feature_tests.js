@@ -340,27 +340,29 @@ SOFTWARE.
   })();
   
   bugs.DOCUMENT_GETELEMENTBYID_CONFUSES_IDS_WITH_NAMES = (bugs.__DOCUMENT_GETELEMENTBYID_CONFUSES_IDS_WITH_NAMES = function(){
-    
-    // need to feature test all these DOM methods before calling them
-    var num = Number(new Date()),
-        name = '__test_' + num,
-        head = document.getElementsByTagName('head')[0],
-        isBuggy = false, 
-        el;
-    
-    try {
-      el = document.createElement('<input name="'+ name +'">');
-    } catch(e) {
-      el = document.createElement('input');
-      el.name = name;
+    if (document.getElementsByTagName && document.createElement) {
+      // need to feature test all these DOM methods before calling them
+      var num = Number(new Date()),
+          name = '__test_' + num,
+          head = document.getElementsByTagName('head')[0],
+          isBuggy = false, 
+          el;
+      try {
+        el = document.createElement('<input name="'+ name +'">');
+      } catch(e) {
+        el = document.createElement('input');
+        el.name = name;
+      }
+      if (head.appendChild && head.removeChild) {
+        head.appendChild(el);
+        var testElement = document.getElementById(name);
+        isBuggy = !!(testElement && (testElement.nodeName.toUpperCase() === 'INPUT'));
+        head.removeChild(el);
+        el = null;
+        return isBuggy;
+      }
     }
-    
-    head.appendChild(el);
-    var testElement = document.getElementById(name);
-    isBuggy = !!(testElement && (testElement.nodeName.toUpperCase() === 'INPUT'));
-    head.removeChild(el);
-    el = null;
-    return isBuggy;
+    return null;
   })();
   
   bugs.DOCUMENT_GETELEMENTBYID_IGNORES_CASE = (bugs.__DOCUMENT_GETELEMENTBYID_IGNORES_CASE = function(){
