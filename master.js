@@ -3,6 +3,10 @@
   if (!('getElementsByClassName' in document)) {
     document.getElementsByClassName = function(className) {
       var all = document.getElementsByTagName('*');
+      if (all.length === 0 && 'all' in document) {
+        // IE5.5
+        all = document.all;
+      }
       if (!className) return all;
       var re = new RegExp('(^|\\s)' + className + '(\\s|$)');
       var result = [];
@@ -70,7 +74,7 @@
       var value = String(testResult === null ? 'N/A' : testResult)
       if (rows[i].cells[1]) {
         rows[i].cells[1].appendChild(document.createTextNode((value + '').toUpperCase()));
-        rows[i].cells[1].className = value;
+        rows[i].cells[1].className = (value === 'N/A' ? 'na' : value);
       }
       var next = rows[i].nextSibling;
       while (next && next.nodeType !== 1) {

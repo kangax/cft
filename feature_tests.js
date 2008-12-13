@@ -182,10 +182,14 @@ SOFTWARE.
       var el = document.createElement('div');
       if (el && el.getElementsByTagName) {
         el.innerHTML = '<span>a</span><!--b-->';
-        var lastNode = el.getElementsByTagName('*')[1];
-        var buggy = !!(lastNode && lastNode.nodeType === 8);
-        el = lastNode = null;
-        return buggy;
+        var all = el.getElementsByTagName('*');
+        // IE5.5 returns a 0-length collection when calling getElementsByTagName with wildcard
+        if (all.length) {
+          var lastNode = el.getElementsByTagName('*')[1];
+          var buggy = !!(lastNode && lastNode.nodeType === 8);
+          el = lastNode = null;
+          return buggy;
+        }
       }
     }
     return null;
@@ -313,30 +317,38 @@ SOFTWARE.
   })();
   
   bugs.TABLE_ELEMENT_INNERHTML_BUGGY = (bugs.__TABLE_ELEMENT_INNERHTML_BUGGY = function(){
-    var isBuggy = true;
-    try {
-      var el = document.createElement('table');
-      if (el) {
-        el.innerHTML = '<tbody><tr><td>test<\/td><\/tr><\/tbody>';
-        isBuggy = !el.tBodies[0];
-        el = null;
-        return isBuggy;
+    if (document.createElement) {
+      try {
+        var el = document.createElement('table');
+        if (el && el.tBodies) {
+          el.innerHTML = '<tbody><tr><td>test<\/td><\/tr><\/tbody>';
+          var isBuggy = typeof el.tBodies[0] == 'undefined';
+          el = null;
+          return isBuggy;
+        }
+      } catch(e) {
+        return true;
       }
-    } catch(e) {
-      return isBuggy;
-    };
+    }
     return null;
   })();
   
   bugs.SCRIPT_ELEMENT_REJECTS_TEXTNODE_APPENDING = (bugs.__SCRIPT_ELEMENT_REJECTS_TEXTNODE_APPENDING = function(){
-    var s = document.createElement('script'), 
-        passed = false;
-    try {
-      s.appendChild(document.createTextNode(''));
-      passed = !!(s.firstChild && s.firstChild.nodeType === 3);
-    } catch(e) { };
-    s = null;
-    return !passed;
+    if (document.createElement && document.createTextNode) {
+      var s = document.createElement('script'),
+          isBuggy = false;
+      if (s && s.appendChild) {
+        try {
+          s.appendChild(document.createTextNode(''));
+          isBuggy = !s.firstChild || (s.firstChild && s.firstChild.nodeType !== 3);
+        } catch(e) {
+          return true;
+        }
+        s = null;
+        return isBuggy;
+      }
+    }
+    return null;
   })();
   
   bugs.DOCUMENT_GETELEMENTBYID_CONFUSES_IDS_WITH_NAMES = (bugs.__DOCUMENT_GETELEMENTBYID_CONFUSES_IDS_WITH_NAMES = function(){
