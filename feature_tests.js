@@ -118,8 +118,9 @@ SOFTWARE.
   (function(){
     
     features.IS_EVENT_METAKEY_PRESENT = false;
-    features.IS_DOM2_EVENT_INTERFACE_IMPLEMENTED = false;
+    features.IS_EVENT_PREVENTDEFAULT_PRESENT = false;
     features.IS_EVENT_SRCELEMENT_PRESENT = false;
+    features.IS_EVENT_RELATEDTARGET_PRESENT = false;
     
     var i = document.createElement('input'),
         root = document.documentElement;
@@ -129,8 +130,9 @@ SOFTWARE.
       i.onclick = function(e) {
         e = e || window.event;
         features.IS_EVENT_METAKEY_PRESENT = ('metaKey' in e);
-        features.IS_DOM2_EVENT_INTERFACE_IMPLEMENTED = (('preventDefault' in e) && ('stopPropagation' in e));
+        features.IS_EVENT_PREVENTDEFAULT_PRESENT = ('preventDefault' in e);
         features.IS_EVENT_SRCELEMENT_PRESENT = ('srcElement' in e);
+        features.IS_EVENT_RELATEDTARGET_PRESENT = ('relatedTarget' in e);
       };
       root.appendChild(i);
       i.click();
