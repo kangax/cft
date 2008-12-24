@@ -1,8 +1,8 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
   "http://www.w3.org/TR/html4/strict.dtd">
-<html lang="en">
+<html lang="en-US">
   <head>
-    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Javascript feature tests</title>
     <link rel="stylesheet" href="master.css" type="text/css" media="screen">
     <script src="feature_tests.js" type="text/javascript"></script>
@@ -124,7 +124,8 @@
           <td>IS_EVENT_PREVENTDEFAULT_PRESENT</td>
           <td></td>
           <td>non-<abbr title="Internet Explorer">IE</abbr></td>
-          <td>Test whether `Event::preventDefault` method is present on event object</td>
+          <td>
+            Test whether DOM L2 <a href="http://www.w3.org/TR/DOM-Level-2-Events/events.html#Events-Event-preventDefault" title="Dcoumentation for Event::preventDefault">Event::preventDefault</a> method is present on event object</td>
           <td><a href="#" title="show test code" class="show-test-code">show</a></td>
         </tr>
         <tr style="display:none"><td colspan="5" class="test-code"><pre></pre></td></tr>
@@ -132,7 +133,9 @@
           <td>IS_EVENT_SRCELEMENT_PRESENT</td>
           <td></td>
           <td><abbr title="Internet Explorer">IE</abbr>, Opera, Chrome, Safari 2+</td>
-          <td>Test whether `srcElement` is present on event object</td>
+          <td>
+            Test whether <a href="http://msdn.microsoft.com/en-us/library/ms534638(VS.85).aspx" title="Dcoumentation for Event::srcElement">Event::srcElement</a> is present on event object
+          </td>
           <td><a href="#" title="show test code" class="show-test-code">show</a></td>
         </tr>
         <tr style="display:none"><td colspan="5" class="test-code"><pre></pre></td></tr>
@@ -140,7 +143,9 @@
           <td>ARGUMENTS_INSTANCEOF_ARRAY</td>
           <td></td>
           <td>Opera</td>
-          <td></td>
+          <td>
+            <a href="http://opera.remcol.ath.cx/bugs/index.php?action=bug&amp;id=326" title="Unofficial Opera bug">Opera bug #326 (Unofficial)</a>
+          </td>
           <td><a href="#" title="show test code" class="show-test-code">show</a></td>
         </tr>
         <tr style="display:none"><td colspan="5" class="test-code"><pre></pre></td></tr>
@@ -275,8 +280,12 @@
           <td>TABLE_ELEMENT_INNERHTML_BUGGY</td>
           <td></td>
           <td>IE</td>
-          <td><a href="http://msdn.microsoft.com/en-us/library/ms533897(VS.85).aspx">`innerHTML` article on MSDN</td>
-          <td><a href="#" title="show test code" class="show-test-code">show</a></td>
+          <td>
+            <a href="http://msdn.microsoft.com/en-us/library/ms533897(VS.85).aspx">`innerHTML` article on MSDN</a>
+          </td>
+          <td>
+            <a href="#" title="show test code" class="show-test-code">show</a>
+          </td>
         </tr>
         <tr style="display:none"><td colspan="5" class="test-code"><pre></pre></td></tr>
         <tr>
