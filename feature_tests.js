@@ -107,7 +107,10 @@ SOFTWARE.
     var fnId = '__eval' + Number(new Date()),
         passed = false;
         
-    window.eval('function ' + fnId + '(){}');
+    try {
+      // catch indirect eval call errors (i.e. in such clients as Blackberry 9530)
+      window.eval('function ' + fnId + '(){}');
+    } catch(e) { }
     passed = (fnId in window);
     if (passed) {
       delete window[fnId];
@@ -115,30 +118,35 @@ SOFTWARE.
     return passed;
   })();
   
-  (function(){
+  ( features.__IS_EVENT_METAKEY_PRESENT = 
+    features.__IS_EVENT_PREVENTDEFAULT_PRESENT = 
+    features.__IS_EVENT_SRCELEMENT_PRESENT = 
+    features.__IS_EVENT_RELATEDTARGET_PRESENT = function(){
     
-    features.IS_EVENT_METAKEY_PRESENT = false;
-    features.IS_EVENT_PREVENTDEFAULT_PRESENT = false;
-    features.IS_EVENT_SRCELEMENT_PRESENT = false;
-    features.IS_EVENT_RELATEDTARGET_PRESENT = false;
+    features.IS_EVENT_METAKEY_PRESENT = null;
+    features.IS_EVENT_PREVENTDEFAULT_PRESENT = null;
+    features.IS_EVENT_SRCELEMENT_PRESENT = null;
+    features.IS_EVENT_RELATEDTARGET_PRESENT = null;
     
-    var i = document.createElement('input'),
-        root = document.documentElement;
-    if (i) {
-      i.type = 'checkbox';
-      i.style.display = 'none';
-      i.onclick = function(e) {
-        e = e || window.event;
-        features.IS_EVENT_METAKEY_PRESENT = ('metaKey' in e);
-        features.IS_EVENT_PREVENTDEFAULT_PRESENT = ('preventDefault' in e);
-        features.IS_EVENT_SRCELEMENT_PRESENT = ('srcElement' in e);
-        features.IS_EVENT_RELATEDTARGET_PRESENT = ('relatedTarget' in e);
-      };
-      root.appendChild(i);
-      i.click();
-      root.removeChild(i);
-      i.onclick = null;
-      i = null;
+    if (document.createElement) {
+      var i = document.createElement('input'),
+          root = document.documentElement;
+      if (i && i.style && i.click && root && root.appendChild && root.removeChild) {
+        i.type = 'checkbox';
+        i.style.display = 'none';
+        i.onclick = function(e) {
+          e = e || window.event;
+          features.IS_EVENT_METAKEY_PRESENT = ('metaKey' in e);
+          features.IS_EVENT_PREVENTDEFAULT_PRESENT = ('preventDefault' in e);
+          features.IS_EVENT_SRCELEMENT_PRESENT = ('srcElement' in e);
+          features.IS_EVENT_RELATEDTARGET_PRESENT = ('relatedTarget' in e);
+        };
+        root.appendChild(i);
+        i.click();
+        root.removeChild(i);
+        i.onclick = null;
+        i = null;
+      }
     }
   })();
   
@@ -154,13 +162,16 @@ SOFTWARE.
       if (root && root.appendChild && root.removeChild) {
         i.style.display = 'none';
         root.appendChild(i);
-        var doc = frames[frames.length-1].document;
-        if (doc && doc.write) {
-          doc.write('<html><head><title></title></head><body></body></html>');
-          var isPresent = doc.documentElement ? ('hasAttribute' in doc.documentElement) : null;
-          root.removeChild(i);
-          i = null;
-          return isPresent;
+        var frame = frames[frames.length-1];
+        if (frame) {
+          var doc = frame.document;
+          if (doc && doc.write) {
+            doc.write('<html><head><title></title></head><body></body></html>');
+            var isPresent = doc.documentElement ? ('hasAttribute' in doc.documentElement) : null;
+            root.removeChild(i);
+            i = null;
+            return isPresent;
+          }
         }
       }
     }
