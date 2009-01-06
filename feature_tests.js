@@ -162,16 +162,21 @@ SOFTWARE.
       if (root && root.appendChild && root.removeChild) {
         i.style.display = 'none';
         root.appendChild(i);
-        var frame = frames[frames.length-1];
-        if (frame) {
-          var doc = frame.document;
-          if (doc && doc.write) {
-            doc.write('<html><head><title></title></head><body></body></html>');
-            var isPresent = doc.documentElement ? ('hasAttribute' in doc.documentElement) : null;
-            root.removeChild(i);
-            i = null;
-            return isPresent;
+        // some clients (e.g. Blackberry 9000 (Bold)) throw error when accesing frame's document
+        try {
+          var frame = frames[frames.length-1];
+          if (frame) {
+            var doc = frame.document;
+            if (doc && doc.write) {
+              doc.write('<html><head><title></title></head><body></body></html>');
+              var isPresent = doc.documentElement ? ('hasAttribute' in doc.documentElement) : null;
+              root.removeChild(i);
+              i = null;
+              return isPresent;
+            }
           }
+        } catch(e) {
+          return null;
         }
       }
     }
