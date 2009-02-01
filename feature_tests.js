@@ -183,6 +183,29 @@ SOFTWARE.
     return null;
   })();
   
+  features.IS_POSITION_FIXED_SUPPORTED = (features.__IS_POSITION_FIXED_SUPPORTED = function(){
+    var isSupported = null;
+    if (document.createElement) {
+      var el = document.createElement('div');
+      if (el && el.style) {
+        el.style.width = '1px';
+        el.style.height = '1px';
+        el.style.position = 'fixed';
+        el.style.top = '10px';
+        var root = document.body;
+        if (root && 
+            root.appendChild && 
+            root.removeChild) {
+          root.appendChild(el);
+          isSupported = (el.offsetTop === 10);
+          root.removeChild(el);
+        }
+        el = null;
+      }
+    }
+    return isSupported;
+  })();
+  
   // BUGGIES
   
   // Safari returns "function" as typeof HTMLCollection
