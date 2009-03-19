@@ -206,6 +206,20 @@ SOFTWARE.
     return isSupported;
   })();
   
+  // Thanks to David Mark for suggestion
+  features.IS_CONTEXTMENU_EVENT_SUPPORTED = (features.__IS_CONTEXTMENU_EVENT_SUPPORTED = function(){
+    var isPresent = null;
+    if (document.createElement) {
+      var el = document.createElement('p');
+      if (el && el.setAttribute) {
+        el.setAttribute('oncontextmenu', '');
+        isPresent = (typeof el.oncontextmenu != 'undefined');
+      }
+      el = null;
+    }
+    return isPresent;
+  })();
+  
   // BUGGIES
   
   // Safari returns "function" as typeof HTMLCollection
