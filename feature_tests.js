@@ -220,6 +220,28 @@ SOFTWARE.
     return isPresent;
   })();
   
+  // Opera 9.x (possibly other versions as well) returns actual values (instead of "auto") 
+  // for statically positioned elements
+  features.COMPUTED_STYLE_RETURNS_VALUES_FOR_STATICLY_POSITIONED_ELEMENTS = (
+  features.__COMPUTED_STYLE_RETURNS_VALUES_FOR_STATICLY_POSITIONED_ELEMENTS = function(){
+    var view = document.defaultView;
+    if (view && view.getComputedStyle) {
+      var docEl = document.documentElement;
+      var position = null;
+      var style = view.getComputedStyle(docEl, null);
+      // if element is not statically positioned, make it as such, then restore
+      if (style.position !== 'static') {
+        position = style.position;
+        docEl.style.position = '';
+      }
+      var result = (view.getComputedStyle(docEl, null).left !== 'auto');
+      if (position !== null) {
+        docEl.style.position = position;
+      }
+      return result;
+    }
+  })();
+  
   // BUGGIES
   
   // Safari returns "function" as typeof HTMLCollection
