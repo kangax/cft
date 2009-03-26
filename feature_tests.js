@@ -242,6 +242,18 @@ SOFTWARE.
     }
   })();
   
+  features.IS_RGBA_SUPPORTED = (features.__IS_RGBA_SUPPORTED = function(){
+    var value = 'rgba(1,1,1,0.5)',
+        el = document.createElement('p'),
+        result = false;
+    try {
+      el.style.color = value;
+      result = /^rgba/.test(el.style.color);
+    } catch(e) { }
+    el = null;
+    return result;
+  })();
+  
   // BUGGIES
   
   // Safari returns "function" as typeof HTMLCollection
