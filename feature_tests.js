@@ -483,6 +483,39 @@ SOFTWARE.
     return null;
   })();
   
+  bugs.BUGGY_OFFSET_VALUES_FOR_STATIC_ELEMENTS_INSIDE_POSITIONED_ONES = (
+  bugs.__BUGGY_OFFSET_VALUES_FOR_STATIC_ELEMENTS_INSIDE_POSITIONED_ONES = function(){
+    var body = document.body, 
+        isBuggy = null;
+    if (body) {
+      var id = 'x' + (Math.random() + '').slice(2);
+      var clearance = "margin:0;padding:0;border:0;visibility:hidden;";
+      var payload = '<div style="position:absolute;top:10px;' + clearance + '">'+
+        '<div style="position:relative;top:10px;' + clearance + '">'+
+          '<div style="height:10px;font-size:1px;' + clearance + '"><\/div>'+
+          '<div id="'+id+'">x<\/div>'+
+        '<\/div>'+
+      '<\/div>';
+      var wrapper = document.createElement('div');
+      wrapper.innerHTML = payload;
+      body.insertBefore(wrapper, body.firstChild);
+      var el = document.getElementById(id);
+      if (el.offsetTop !== 10) {
+        // buggy, set position to relative and check if it fixes it
+        el.style.position = 'relative';
+        if (el.offsetTop === 10) {
+          isBuggy = true;
+        }
+      }
+      else {
+        isBuggy = false;
+      }
+      body.removeChild(wrapper);
+      wrapper = null;
+    }
+    return isBuggy;
+  })();
+  
   __global.__totalTime = (new Date() - t);
 
   __global.__features = features;
