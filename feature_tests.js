@@ -516,6 +516,20 @@ SOFTWARE.
     return isBuggy;
   })();
   
+  bugs.IS_XPATH_POSITION_FUNCTION_BUGGY = (bugs.__IS_XPATH_POSITION_FUNCTION_BUGGY = function(){
+    var isBuggy = false;
+    if (document.evaluate && window.XPathResult) {
+      var el = document.createElement('div');
+      el.innerHTML = '<p id="p1">a<\/p><p id="p2">b<\/p>';
+      var xpath = "//*[position() = 2]";
+      var result = document.evaluate(xpath, el, null, 
+        XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+      var isBuggy = (result.snapshotLength !== 1);
+      el = null; 
+    }
+    return isBuggy;
+  })();
+  
   __global.__totalTime = (new Date() - t);
 
   __global.__features = features;
