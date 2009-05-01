@@ -15,7 +15,10 @@
       Too many times I see Javascript authors fail into the trap of browser sniffing.
       Feature detection is known to be a much better practice when it comes to creating robust scripts for general web.
       Hopefully, this collection can serve as a repository of most common (non-trivial) feature tests.
-      None of the tests require presence of <code>document.body</code> (unless explicitly noted) and so can be run at any time.
+      Most of the tests require no presence of <code>document.body</code> and so can be run at any time. Otherwise, a note about <code>document.body</code> requirement is mentioned in test description.
+      </p>
+      <p>
+        All of the tests assume the presence of global <code>document</code> property. Everything else is tested before it's being used.
       </p>
       <p>
         <strong>Tested browsers</strong>: 
@@ -26,6 +29,7 @@
         Mobile Safari 3.2,
         Chrome 0.4.154.29-1.0.154.36,
         Camino 1.6.6,
+        Konqueror 4.2.2,
         BlackBerry 9000 (Bold), 9530 (Storm)
       </p>
       <p>
@@ -33,7 +37,7 @@
       </p>
     </div>
     <p>
-      <span id="last-updated" class="dtstart">Last updated: Apr 16 2009</span>
+      <span id="last-updated" class="dtstart">Last updated: Apr 30 2009</span>
     </p>
     
     <h2>Features:</h2>
@@ -55,29 +59,19 @@
       </thead>
       <tbody>
         <tr>
-          <td>IS_TRANSFORMATION_SUPPORTED</td>
-          <td></td>
-          <td>Chrome, Firefox 3.1+</td>
-          <td>
-            <a href="http://webkit.org/specs/CSSVisualEffects/CSSTransforms.html">
-              CSSTransforms specs
-            </a>
-          </td>
-          <td><a href="#" title="show test code" class="show-test-code">show</a></td>
-        </tr>
-        <tr style="display:none"><td colspan="5" class="test-code"><pre></pre></td></tr>
-        <tr>
           <td>IS_ELEMENT_TAGNAME_UPPERCASED</td>
           <td></td>
           <td>-</td>
           <td>
+            <a name="IS_ELEMENT_TAGNAME_UPPERCASED" style="position: absolute; left: -9999em;"></a>
             <a href="https://developer.mozilla.org/en/DOM/element.tagName" title="element.tagName on MDC">
-              element.tagName on MDC
+              <code>element.tagName</code> on MDC
             </a>
           </td>
           <td><a href="#" title="show test code" class="show-test-code">show</a></td>
         </tr>
         <tr style="display:none"><td colspan="5" class="test-code"><pre></pre></td></tr>
+
         <tr>
           <td>ARRAY_PROTOTYPE_SLICE_CAN_CONVERT_NODELIST_TO_ARRAY</td>
           <td></td>
@@ -86,22 +80,16 @@
           <td><a href="#" title="show test code" class="show-test-code">show</a></td>
         </tr>
         <tr style="display:none"><td colspan="5" class="test-code"><pre></pre></td></tr>
-        <tr>
-          <td>EVENT_HANDLERS_ARE_FIFO</td>
-          <td></td>
-          <td>non-<abbr title="Internet Explorer">IE</abbr></td>
-          <td></td>
-          <td><a href="#" title="show test code" class="show-test-code">show</a></td>
-        </tr>
-        <tr style="display:none"><td colspan="5" class="test-code"><pre></pre></td></tr>
+
         <tr>
           <td>WINDOW_EVAL_EVALUATES_IN_GLOBAL_SCOPE</td>
           <td></td>
           <td>Firefox, Safari 3.2.1, Opera</td>
-          <td>Test whether `window.eval` evaluates string in global context</td>
+          <td>Test whether <code>window.eval</code> evaluates string in global scope</td>
           <td><a href="#" title="show test code" class="show-test-code">show</a></td>
         </tr>
         <tr style="display:none"><td colspan="5" class="test-code"><pre></pre></td></tr>
+
         <tr>
           <td>IS_EVENT_METAKEY_PRESENT</td>
           <td></td>
@@ -110,6 +98,7 @@
           <td><a href="#" title="show test code" class="show-test-code">show</a></td>
         </tr>
         <tr style="display:none"><td colspan="5" class="test-code"><pre></pre></td></tr>
+
         <tr>
           <td>IS_EVENT_RELATEDTARGET_PRESENT</td>
           <td></td>
@@ -122,6 +111,7 @@
           <td><a href="#" title="show test code" class="show-test-code">show</a></td>
         </tr>
         <tr style="display:none"><td colspan="5" class="test-code"><pre></pre></td></tr>
+        
         <tr>
           <td>IS_EVENT_PREVENTDEFAULT_PRESENT</td>
           <td></td>
@@ -131,6 +121,7 @@
           <td><a href="#" title="show test code" class="show-test-code">show</a></td>
         </tr>
         <tr style="display:none"><td colspan="5" class="test-code"><pre></pre></td></tr>
+        
         <tr>
           <td>IS_EVENT_SRCELEMENT_PRESENT</td>
           <td></td>
@@ -169,7 +160,7 @@
           <td></td>
           <td>-</td>
           <td>
-            Check if `position:fixed` is supported. Requires presence of <strong>document.body</strong>
+            Check if <code>position:fixed;</code> is supported. Requires presence of <strong>document.body</strong>
           </td>
           <td><a href="#" title="show test code" class="show-test-code">show</a></td>
         </tr>
@@ -177,7 +168,7 @@
         <tr>
           <td>IS_CONTEXTMENU_EVENT_SUPPORTED</td>
           <td></td>
-          <td>All except Opera &lt;=10.a</td>
+          <td>All except Opera &lt;=10.a and Konqueror (4.2.2)</td>
           <td>
             Check if "contextmenu" event is supported.
           </td>
@@ -194,12 +185,37 @@
           <td><a href="#" title="show test code" class="show-test-code">show</a></td>
         </tr>
         <tr style="display:none"><td colspan="5" class="test-code"><pre></pre></td></tr>
+        
         <tr>
           <td>IS_RGBA_SUPPORTED</td>
           <td></td>
           <td>FF3+, Safari 3+</td>
           <td>
             Check whether RGBA is supported
+          </td>
+          <td><a href="#" title="show test code" class="show-test-code">show</a></td>
+        </tr>
+        <tr style="display:none"><td colspan="5" class="test-code"><pre></pre></td></tr>
+        
+        <tr>
+          <td>IS_CSS_BORDER_RADIUS_SUPPORTED</td>
+          <td></td>
+          <td>WebKit-, Gecko- and KHTML- (newer) based</td>
+          <td>
+            Check whether <a href="http://www.w3.org/TR/css3-background/#the-border-radius">CSS3 border-radius property</a> is supported (or any of vendor proprietary extensions - "-moz-border-radius", "-webkit-border-radius", "-khtml-border-radius")
+          </td>
+          <td><a href="#" title="show test code" class="show-test-code">show</a></td>
+        </tr>
+        <tr style="display:none"><td colspan="5" class="test-code"><pre></pre></td></tr>
+        
+        <tr>
+          <td>IS_CSS_TRANSFORMATION_SUPPORTED</td>
+          <td></td>
+          <td>Chrome, Firefox 3.1+</td>
+          <td>
+            <a href="http://webkit.org/specs/CSSVisualEffects/CSSTransforms.html">
+              CSSTransforms specs
+            </a>
           </td>
           <td><a href="#" title="show test code" class="show-test-code">show</a></td>
         </tr>
@@ -233,14 +249,14 @@
           <td></td>
           <td>IE, Safari</td>
           <td>
-            Test whether /\s/ matches whitespace characters (\t,\v,\f, etc.)
+            Test whether <code>/\s/</code> matches whitespace characters (<code>\t</code>,<code>\v</code>,<code>\f</code>, etc.)
             (See <a href="http://bclary.com/2004/11/07/#a-15.10.2.12" title="ECMA-262 15.10.2.12">15.10.2.12</a>)
           </td>
           <td><a href="#" title="show test code" class="show-test-code">show</a></td>
         </tr>
         <tr style="display:none"><td colspan="5" class="test-code"><pre></pre></td></tr>
         <tr>
-          <td>IS_STRING_PROTOTYPE_REPLACE_REGEXP_BUGGY</td>
+          <td>IS_STRING_PROTOTYPE_SPLIT_REGEXP_BUGGY</td>
           <td></td>
           <td>IE</td>
           <td>
@@ -254,7 +270,7 @@
           <td></td>
           <td>IE &lt;=7</td>
           <td>
-            `name` attribute can not be set at run time in IE, see 
+            <code>name</code> attribute can not be changed at runtime in IE, see 
             <a href="http://msdn.microsoft.com/en-us/library/ms536389.aspx" title="article on MSDN">article on MSDN</a>
           </td>
           <td><a href="#" title="show test code" class="show-test-code">show</a></td>
@@ -323,7 +339,7 @@
           <td></td>
           <td>IE</td>
           <td>
-            <a href="http://msdn.microsoft.com/en-us/library/ms533897(VS.85).aspx">`innerHTML` article on MSDN</a>
+            <a href="http://msdn.microsoft.com/en-us/library/ms533897(VS.85).aspx">innerHTML article on MSDN</a>
           </td>
           <td>
             <a href="#" title="show test code" class="show-test-code">show</a>
@@ -342,7 +358,7 @@
           <td>DOCUMENT_GETELEMENTBYID_CONFUSES_IDS_WITH_NAMES</td>
           <td></td>
           <td>IE &lt;=7, Opera &lt;9.5</td>
-          <td>`document.getElementById` returns elements with corresponding name attributes</td>
+          <td><code>document.getElementById</code> returns elements with corresponding name attributes</td>
           <td><a href="#" title="show test code" class="show-test-code">show</a></td>
         </tr>
         <tr style="display:none"><td colspan="5" class="test-code"><pre></pre></td></tr>
