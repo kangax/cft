@@ -23,14 +23,17 @@ SOFTWARE.
   
   var t = new Date();
   
+  // make sure `window` resolves to a global object
+  var window = this;
+  
   var features = { };
   var bugs = { };
   
   features.IS_CSS_TRANSFORMATION_SUPPORTED = (features.__IS_CSS_TRANSFORMATION_SUPPORTED = function(){
-    var docEl = document.documentElement;
-    if (docEl && docEl.style) {
-      return (typeof docEl.style.WebkitTransform == 'string'
-        || typeof docEl.style.MozTransform == 'string');
+    var docEl = document.documentElement, s;
+    if (docEl && (s = docEl.style)) {
+      return (typeof s.WebkitTransform == 'string'
+        || typeof s.MozTransform == 'string');
     }
     return null;
   })();
@@ -61,8 +64,10 @@ SOFTWARE.
   features.ARRAY_PROTOTYPE_SLICE_CAN_CONVERT_NODELIST_TO_ARRAY = (features.__ARRAY_PROTOTYPE_SLICE_CAN_CONVERT_NODELIST_TO_ARRAY = function(){
     try {
       return (Array.prototype.slice.call(document.forms, 0) instanceof Array);
-    } catch(e) { };
-    return false;
+    }
+    catch(e) {
+      return false;
+    }
   })();
   
   features.WINDOW_EVAL_EVALUATES_IN_GLOBAL_SCOPE = (features.__WINDOW_EVAL_EVALUATES_IN_GLOBAL_SCOPE = function(){
@@ -71,11 +76,16 @@ SOFTWARE.
         
     try {
       // catch indirect eval call errors (i.e. in such clients as Blackberry 9530)
-      window.eval('function ' + fnId + '(){}');
+      window.eval('var ' + fnId + '=true');
     } catch(e) { }
-    passed = (fnId in window);
+    passed = (window[fnId] === true);
     if (passed) {
-      delete window[fnId];
+      try {
+        delete window[fnId];
+      }
+      catch(e) {
+        window[fnId] = void 0;
+      }
     }
     return passed;
   })();
@@ -210,7 +220,7 @@ SOFTWARE.
       var value = 'rgba(1,1,1,0.5)',
           el = document.createElement('p'),
           re = /^rgba/;
-      if (el && el.style && re.test) {
+      if (el && el.style && typeof re.test == 'function') {
         try {
           el.style.color = value;
           result = re.test(el.style.color);
@@ -521,6 +531,28 @@ SOFTWARE.
         el = null;
       }
     }
+    return isBuggy;
+  })();
+  
+  bugs.IS_DOCUMENT_GETELEMENTSBYNAME_BUGGY = (bugs.__IS_DOCUMENT_GETELEMENTSBYNAME_BUGGY = function(){
+    var isBuggy = null, 
+        docEl = document.documentElement;
+    if (docEl && 
+        docEl.appendChild &&
+        docEl.removeChild &&
+        document.getElementsByName && 
+        document.createElement) {
+      var el = document.createElement('div');
+      if (el) {
+        var uid = 'x' + (Math.random() + '').slice(2);
+        el.id = uid;
+        docEl.appendChild(el);
+        isBuggy = document.getElementsByName(uid)[0] === el;
+        docEl.removeChild(el);
+        el = null;
+      } 
+    }
+    
     return isBuggy;
   })();
   

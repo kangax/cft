@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+  "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en-US">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    
+    <title>Style tests</title>
+    
+    <style type="text/css">
+      p { margin: 0 0 0.5em 0; }
+      span { padding: 0.1em 0.5em; }
+      span.string { background: green; color: #fff; }
+      span.undefined { background: red; color: #fff; }
+      .hl { background: #ffc; }
+			pre { margin-top: 4em;background-color: #eef; border: 1px solid #aaf; padding: 1em 0.5em; }
+    </style>
+    
+    <script src="getStyleProperty.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+      (function(){
+        var properties;
+        
+        var b = document.body;
+        function write(s) {
+          b.appendChild(document.createTextNode(s));
+          b.appendChild(document.createElement('br'));
+        }
+        
+        function test(){
+          for (var i=0, l=properties.length; i<l; i++) {
+            var propName = getStyleProperty(properties[i]);
+            var result = typeof propName;
+            var str = [
+              '<p>', 
+              properties[i], 
+              ': <span class="', 
+              result, 
+              '">', 
+              result, 
+              '<\/span>', 
+              (result == 'undefined' ? '' : ' found: <span class="hl">' + propName + '<\/span>'), 
+              '<\/p>'
+            ].join('');
+            document.writeln(str);
+          }
+        }
+        
+        properties = ['opacity', 'minWidth', 'minHeight', 'maxWidth', 'maxHeight'];
+        
+        document.writeln('<h2>CSS2:<\/h2>');
+        test();
+        
+        properties = [
+          'borderRadius',
+          'borderImage',
+          'backgroundOrigin',
+          'backgroundClip',
+          'backgroundSize',
+          'boxShadow',
+          'boxSizing',
+          'textOverflow',
+          'textShadow',
+          'textStroke',
+					'textJustify',
+          'textFillColor',
+					'layoutGrid',
+          'appearance',
+          'resize',
+          'outlineOffset',
+          'wordWrap',
+					'overflowX',
+					'overflowY'
+        ];
+        
+        document.writeln('<h2>CSS3:<\/h2>');
+        test();
+        
+        properties = [
+          'transform',
+          'transition'
+        ];
+        document.write('<h2>CSS Transforms/Transitions<\/h2>');
+        test();
+        
+				document.write(
+					'<pre>' + 
+					String(getStyleProperty).replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/&/g, '&amp;') + 
+					'<\/pre>');
+      })();
+    </script>
+	<p style="font-size: 0.8m;">by <a href="http://thinkweb2.com/projects/prototype/">kangax</a></p>
+  </body>
+</html>
