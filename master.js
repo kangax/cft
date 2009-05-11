@@ -142,4 +142,13 @@
     p.innerHTML = ('Finished all tests in: <strong>' + __totalTime + '</strong>ms');
     document.body.appendChild(p);
   }
+  
+  var hash = document.location.hash.slice(1);
+  var links = document.anchors, i = links.length;
+  while (i--) {
+    if (links[i].name === hash) {
+      toggleCodeSection(links[i]);
+      break;
+    }
+  }
 })();
