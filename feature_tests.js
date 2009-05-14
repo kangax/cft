@@ -212,6 +212,7 @@ SOFTWARE.
       }
       return result;
     }
+    return null;
   })();
   
   features.IS_RGBA_SUPPORTED = (features.__IS_RGBA_SUPPORTED = function(){
