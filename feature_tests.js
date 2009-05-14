@@ -245,6 +245,14 @@ SOFTWARE.
     return null;
   })();
   
+  features.IS_CANVAS_SUPPORTED = (features.__IS_CANVAS_SUPPORTED = function(){
+    if (document.createElement) {
+      var elCanvas = document.createElement('canvas');
+      return !!(elCanvas && elCanvas.getContext && elCanvas.getContext('2d'));
+    }
+    return null;
+  })();
+  
   // BUGGIES
   
   // Safari returns "function" as typeof HTMLCollection

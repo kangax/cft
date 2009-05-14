@@ -20,6 +20,7 @@
       <p>
         All of the tests assume the presence of global <code>document</code> property. Everything else is tested before it's being used.
       </p>
+			<p>Also, see tests of some of the <a href="style.html" title="">CSS2/3 properties</a> and corresponding <code>getStyleProperty</code> utility</p>
       <p>
         <strong>Tested browsers</strong>: 
         Interner Explorer 5.5-8.0RC1,
@@ -37,7 +38,7 @@
       </p>
     </div>
     <p>
-      <span id="last-updated" class="dtstart">Last updated: May 11 2009</span>
+      <span id="last-updated" class="dtstart">Last updated: May 13 2009</span>
     </p>
     
     <h2>Features:</h2>
@@ -219,6 +220,17 @@
           <td><a href="#" title="show test code" class="show-test-code" name="IS_CSS_TRANSFORMATION_SUPPORTED">show</a></td>
         </tr>
         <tr style="display:none"><td colspan="5" class="test-code"><pre></pre></td></tr>
+
+				<tr>
+          <td>IS_CANVAS_SUPPORTED</td>
+          <td></td>
+          <td>Most of non-IE, Opera 9.x+</td>
+          <td>
+						Is <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html" title="Specs for canvas element">HTML5 canvas element</a> supported? 
+          </td>
+          <td><a href="#" title="show test code" class="show-test-code" name="IS_CANVAS_SUPPORTED">show</a></td>
+        </tr>
+        <tr style="display:none"><td colspan="5" class="test-code"><pre></pre></td></tr>
       </tbody>
     </table>
     
@@ -320,7 +332,7 @@
         <tr>
           <td>PRE_ELEMENTS_IGNORE_NEWLINES</td>
           <td></td>
-          <td>IE&lt;=7</td>
+          <td>IE&lt;=7, Opera 8.54+</td>
           <td></td>
           <td><a href="#" title="show test code" class="show-test-code" name="PRE_ELEMENTS_IGNORE_NEWLINES">show</a></td>
         </tr>
