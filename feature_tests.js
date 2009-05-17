@@ -523,7 +523,8 @@ SOFTWARE.
     return isBuggy;
   })();
   
-  bugs.IS_XPATH_POSITION_FUNCTION_BUGGY = (bugs.__IS_XPATH_POSITION_FUNCTION_BUGGY = function(){
+  bugs.IS_XPATH_POSITION_FUNCTION_BUGGY = (
+  bugs.__IS_XPATH_POSITION_FUNCTION_BUGGY = function(){
     var isBuggy = null;
     if (document.evaluate && window.XPathResult) {
       if (document.createElement) {
@@ -543,7 +544,8 @@ SOFTWARE.
     return isBuggy;
   })();
   
-  bugs.IS_DOCUMENT_GETELEMENTSBYNAME_BUGGY = (bugs.__IS_DOCUMENT_GETELEMENTSBYNAME_BUGGY = function(){
+  bugs.IS_DOCUMENT_GETELEMENTSBYNAME_BUGGY = (
+  bugs.__IS_DOCUMENT_GETELEMENTSBYNAME_BUGGY = function(){
     var isBuggy = null, 
         docEl = document.documentElement;
     if (docEl && 
@@ -563,6 +565,19 @@ SOFTWARE.
     }
     
     return isBuggy;
+  })();
+  
+  bugs.NAMED_FUNCTION_EXPRESSION_IDENTIFIER_LEAKS_ONTO_ENCLOSING_SCOPE = (
+  bugs.__NAMED_FUNCTION_EXPRESSION_IDENTIFIER_LEAKS_ONTO_ENCLOSING_SCOPE = function(){
+    // make sure `g` is not found higher up the scope chain, by declaring it here
+    var g = null;
+    return (function(){
+      var f = function g(){};
+      // `g` should be resolved to `null` (the one we declared outside this function)
+      // but since named function expression identifier leaks onto the enclosing scope in IE, 
+      // it will be resolved to a function
+      return (typeof g == 'function');
+    })();
   })();
   
   __global.__totalTime = (new Date() - t);
