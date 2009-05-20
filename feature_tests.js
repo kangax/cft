@@ -122,10 +122,6 @@ SOFTWARE.
     }
   })();
   
-  features.ARGUMENTS_INSTANCEOF_ARRAY = (features.__ARGUMENTS_INSTANCEOF_ARRAY = function(){ 
-    return arguments instanceof Array;
-  })();
-  
   features.IS_NATIVE_HAS_ATTRIBUTE_PRESENT = (features.__IS_NATIVE_HAS_ATTRIBUTE_PRESENT = function(){
     if (document.createElement) {
       var i = document.createElement('iframe'),
@@ -578,6 +574,10 @@ SOFTWARE.
       // it will be resolved to a function
       return (typeof g == 'function');
     })();
+  })();
+  
+  bugs.ARGUMENTS_INSTANCEOF_ARRAY = (features.__ARGUMENTS_INSTANCEOF_ARRAY = function(){ 
+    return arguments instanceof Array;
   })();
   
   __global.__totalTime = (new Date() - t);
