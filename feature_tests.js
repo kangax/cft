@@ -250,6 +250,24 @@ SOFTWARE.
     return null;
   })();
   
+  features.ELEMENT_CHILDREN_RETURNS_ELEMENT_NODES = (features.__ELEMENT_CHILDREN_RETURNS_ELEMENT_NODES = function(){
+    var isSupported = null,
+        docEl = document.documentElement;
+    if (document.createElement && typeof docEl.children != 'undefined') {
+      var el = document.createElement('div');
+      el.innerHTML = '<div><p>a<\/p><\/div>b';
+      // Safari 2.x returns ALL elements in `children`
+      // We check that first element is a DIV and that it's the only one element returned
+      isSupported = (el.children && 
+        el.children.length === 1 && 
+        el.children[0] &&
+        el.children[0].tagName &&
+        el.children[0].tagName.toUpperCase() === 'DIV');
+      el = docEl = null;
+    }
+    return isSupported;
+  })();
+  
   // BUGGIES
   
   // Safari returns "function" as typeof HTMLCollection
@@ -523,18 +541,14 @@ SOFTWARE.
   bugs.__IS_XPATH_POSITION_FUNCTION_BUGGY = function(){
     var isBuggy = null;
     if (document.evaluate && window.XPathResult) {
-      if (document.createElement) {
-        var el = document.createElement('div');
-        if (el) {
-          el.innerHTML = '<p>a<\/p><p>b<\/p>';
-          var xpath = "//*[position() = 2]";
-          var result = document.evaluate(xpath, el, null, 
-            XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-          if (result) {
-            isBuggy = (result.snapshotLength !== 1);
-          }
-        }
-        el = null;
+      var el = document.createElement('div');
+      el.innerHTML = '<p>a</p><p>b</p>'
+      var xpath = ".//*[local-name()='p' or local-name()='P'][position() = 2]";
+      var result = document.evaluate(xpath, el, null, 
+        XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+      if (result) {
+        // TODO: investigate further
+        // alert(result.snapshotItem(0));
       }
     }
     return isBuggy;
