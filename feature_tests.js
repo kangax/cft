@@ -590,8 +590,23 @@ SOFTWARE.
     })();
   })();
   
-  bugs.ARGUMENTS_INSTANCEOF_ARRAY = (features.__ARGUMENTS_INSTANCEOF_ARRAY = function(){ 
+  bugs.ARGUMENTS_INSTANCEOF_ARRAY = (bugs.__ARGUMENTS_INSTANCEOF_ARRAY = function(){
     return arguments instanceof Array;
+  })();
+  
+  bugs.IS_OVERFLOW_STYLE_BUGGY = (bugs.__IS_OVERFLOW_STYLE_BUGGY = function(){
+    var isBuggy = null;
+    if (document.createElement) {
+      var el = document.createElement('div');
+      el.innerHTML = '<p style="overflow: visible;">x</p>';
+      var firstChild = el.firstChild;
+      if (firstChild && firstChild.style) {
+        firstChild.style.overflow = 'hidden';
+        isBuggy = firstChild.style.overflow !== 'hidden';
+      }
+      el = firstChild = null;
+    }
+    return isBuggy;
   })();
   
   __global.__totalTime = (new Date() - t);
