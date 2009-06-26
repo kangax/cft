@@ -268,6 +268,24 @@ SOFTWARE.
     return isSupported;
   })();
   
+  features.IS_CSS_ON = (features.__IS_CSS_ON = function(){
+    var body = document.body, 
+        isSupported = null;
+    if (document.createElement && 
+        body && 
+        body.appendChild && 
+        body.removeChild) {
+      var el = document.createElement('div');
+      if (el && el.style) {
+        el.style.display = 'none';
+        body.appendChild(el);
+        isSupported = (el.offsetWidth === 0);
+        body.removeChild(el);
+      }
+    }
+    return isSupported;
+  })();
+  
   // BUGGIES
   
   // Safari returns "function" as typeof HTMLCollection

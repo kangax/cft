@@ -150,7 +150,7 @@
           <td></td>
           <td>-</td>
           <td>
-            Check if <code>position:fixed;</code> is supported. Requires presence of <strong>document.body</strong>
+            Check if <code>position:fixed;</code> is supported. Requires presence of <strong><code>document.body</code></strong>
           </td>
           <td><a href="#" title="show test code" class="show-test-code" name="IS_POSITION_FIXED_SUPPORTED">show</a></td>
         </tr>
@@ -232,7 +232,18 @@
           <td><a href="#" title="show test code" class="show-test-code" name="ELEMENT_CHILDREN_RETURNS_ELEMENT_NODES">show</a></td>
         </tr>
         <tr style="display:none"><td colspan="5" class="test-code"><pre></pre></td></tr>
-          
+        
+        <tr>
+          <td>IS_CSS_ON</td>
+          <td></td>
+          <td></td>
+          <td>
+						Checks whether CSS is enabled. Requires presence of <strong><code>document.body</code></strong>. Note that certain "!important" declarations might cause this test to produce false positives.
+          </td>
+          <td><a href="#" title="show test code" class="show-test-code" name="IS_CSS_ON">show</a></td>
+        </tr>
+        <tr style="display:none"><td colspan="5" class="test-code"><pre></pre></td></tr>
+      
       </tbody>
     </table>
     
@@ -387,7 +398,7 @@
           <td>BUGGY_OFFSET_VALUES_FOR_STATIC_ELEMENTS_INSIDE_POSITIONED_ONES</td>
           <td></td>
           <td>IE &lt;=7, Opera &lt;8.54</td>
-          <td>Requires presence of <strong>document.body</strong></td>
+          <td>Requires presence of <strong><code>document.body</code></strong></td>
           <td><a href="#" title="show test code" class="show-test-code" name="BUGGY_OFFSET_VALUES_FOR_STATIC_ELEMENTS_INSIDE_POSITIONED_ONES">show</a></td>
         </tr>
         <tr style="display:none"><td colspan="5" class="test-code"><pre></pre></td></tr>
