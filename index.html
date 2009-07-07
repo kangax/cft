@@ -1,11 +1,18 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
   "http://www.w3.org/TR/html4/strict.dtd">
+  
 <html lang="en-US">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="Content-Style-Type" content="text/css">
+    
+    <meta content="Common javascript feature tests" name="description">
+    <meta content="cft, javascript feature tests, feature detection, object detection, browser sniffing, browser bugs" name="keywords">
+    <meta content="Juriy 'kangax' Zaytsev" name="author">
+    
     <title>Javascript feature tests</title>
     <link rel="stylesheet" href="master.css" type="text/css" media="screen">
+    
   </head>
   <body>
     
@@ -15,7 +22,8 @@
       Too many times I see Javascript authors fail into the trap of browser sniffing.
       Feature detection is known to be a much better practice when it comes to creating robust scripts for general web.
       Hopefully, this collection can serve as a repository of most common (non-trivial) feature tests.
-      Most of the tests require no presence of <code>document.body</code> and so can be run at any time. Otherwise, a note about <code>document.body</code> requirement is mentioned in test description.
+      Most of the tests require no presence of <code>document.body</code> and so can be run at any time. 
+      Otherwise, a note about <code>document.body</code> requirement is mentioned in test description.
       </p>
       <p>
         All of the tests assume the presence of global <code>document</code> property. Everything else is tested before it's being used.
@@ -38,7 +46,7 @@
       </p>
     </div>
     <p>
-      <span id="last-updated" class="dtstart">Last updated: June 29 2009</span>
+      <span id="last-updated" class="dtstart">Last updated: July 7 2009</span>
     </p>
     
     <h2>Features:</h2>
