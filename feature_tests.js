@@ -286,6 +286,26 @@ SOFTWARE.
     return isSupported;
   })();
   
+  features.IS_DOMFOCUSIN_SUPPORTED = (features.__IS_DOMFOCUSIN_SUPPORTED = function(){
+    var body = document.body,
+        isSupported = null;
+    if (document.createElement && 
+        body && 
+        body.appendChild && 
+        body.removeChild) {
+      var el = document.createElement('DIV');
+      if (el && el.addEventListener && el.focus) {
+        isSupported = false;
+        el.addEventListener('DOMFocusIn', function(){ isSupported = true; }, false);
+        el.tabIndex = -1;
+        body.appendChild(el);
+        el.focus();
+        body.removeChild(el);
+      }
+    }
+    return isSupported;
+  })();
+  
   // BUGGIES
   
   // Safari returns "function" as typeof HTMLCollection
