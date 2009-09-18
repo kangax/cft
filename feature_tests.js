@@ -306,6 +306,16 @@ SOFTWARE.
     return isSupported;
   })();
   
+  features.IS_QUIRKS_MODE = (features.__IS_QUIRKS_MODE = function(){
+    if (document.createElement) {
+      var el = document.createElement('div');
+      if (el && el.style) {
+        el.style.width = '1';
+      }
+      return el.style.width === '1px';
+    }
+  })();
+  
   // BUGGIES
   
   // Safari returns "function" as typeof HTMLCollection
