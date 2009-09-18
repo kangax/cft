@@ -411,11 +411,9 @@ SOFTWARE.
   })();
   
   bugs.IS_REGEXP_WHITESPACE_CHARACTER_CLASS_BUGGY = (bugs.__IS_REGEXP_WHITESPACE_CHARACTER_CLASS_BUGGY = function(){
-    var s = "\x09\x0B\x0C\x20\xA0\x0A\x0D\u2028\u2029";
-    if (typeof s.replace == 'function') {
-      return s.replace(/\s+/, '').length !== 0;
-    }
-    return null;
+    var str = "\u0009\u000A\u000B\u000C\u000D\u0020\u00A0\u1680\u180E\u2000\u2001\u2002"+
+            "\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029";
+    return !/^\s+$/.test(str);
   })();
   
   bugs.IS_STRING_PROTOTYPE_SPLIT_REGEXP_BUGGY = (bugs.__IS_STRING_PROTOTYPE_SPLIT_REGEXP_BUGGY = function(){
