@@ -15,3 +15,4 @@ th.name { padding: 0 10px; }
 th a { font-size: 11px; color: #eef; }
 th.code { width: 100px; }
 pre { width: 1024px; overflow: auto; }
+abbr { border: none; }
