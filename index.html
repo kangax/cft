@@ -6,7 +6,7 @@
     <meta http-equiv="Content-Style-Type" content="text/css">
     
     <meta content="Common javascript feature tests" name="description">
-    <meta content="cft, javascript feature tests, feature detection, object detection, browser sniffing, browser bugs" name="keywords">
+    <meta content="cft, javascript feature tests, feature detection, object detection, browser sniffing, browser bugs, browser detection" name="keywords">
     <meta content="Juriy 'kangax' Zaytsev" name="author">
     
     <title>Javascript feature tests</title>
@@ -479,6 +479,17 @@
             Konqueror (at least 4.2.2) fails to change element's <code>style.overflow</code> if its value was set from within HTML.
           </td>
           <td><a href="#" title="show test code" class="show-test-code" name="IS_OVERFLOW_STYLE_BUGGY">show</a></td>
+        </tr>
+        <tr style="display:none"><td colspan="5" class="test-code"><pre></pre></td></tr>
+        
+        <tr>
+          <td>IS_CONTAINS_BUGGY</td>
+          <td></td>
+          <td>Safari 2.0 - 2.0.4 (possibly earlier too)</td>
+          <td>
+            In older Safari `contains` returns `true` for any unrelated node, as long as that node is not an ancestor of tested node.
+          </td>
+          <td><a href="#" title="show test code" class="show-test-code" name="IS_CONTAINS_BUGGY">show</a></td>
         </tr>
         <tr style="display:none"><td colspan="5" class="test-code"><pre></pre></td></tr>
         

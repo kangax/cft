@@ -316,6 +316,17 @@ SOFTWARE.
     }
   })();
   
+  features.IS_CONTAINS_BUGGY = (features.__IS_CONTAINS_BUGGY = function(){
+    if (document.createElement) {
+      var el1 = document.createElement('div');
+      var el2 = document.createElement('div');
+      if (el1 && el2 && el1.contains) {
+        return el1.contains(el2);
+      }
+    }
+    return null;
+  })();
+  
   // BUGGIES
   
   // Safari returns "function" as typeof HTMLCollection
