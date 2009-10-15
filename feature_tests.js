@@ -672,6 +672,19 @@ SOFTWARE.
     return isBuggy;
   })();
   
+  bugs.IS_QUERY_SELECTOR_ALL_BUGGY = (bugs.__IS_QUERY_SELECTOR_ALL_BUGGY = function(){
+    var isBuggy = null; 
+    if (document.createElement) {
+      var el = document.createElement('div');
+      if (el && el.querySelectorAll) {
+        el.innerHTML = '<object><param></param></object>';
+        isBuggy = el.querySelectorAll("param").length != 1;
+      }
+      el = null;
+    }
+    return isBuggy;
+  })();
+  
   __global.__totalTime = (new Date() - t);
 
   __global.__features = features;
