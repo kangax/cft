@@ -255,7 +255,7 @@ SOFTWARE.
         docEl = document.documentElement;
     if (document.createElement && typeof docEl.children != 'undefined') {
       var el = document.createElement('div');
-      el.innerHTML = '<div><p>a<\/p><\/div>b';
+      el.innerHTML = '<div><p>a<\/p><\/div>b<!-- x -->';
       // Safari 2.x returns ALL elements in `children`
       // We check that first element is a DIV and that it's the only one element returned
       isSupported = (el.children && 
