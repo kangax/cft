@@ -268,7 +268,7 @@ SOFTWARE.
     return isSupported;
   })();
   
-  features.IS_CSS_ON = (features.__IS_CSS_ON = function(){
+  features.IS_CSS_ENABLED = (features.__IS_CSS_ENABLED = function(){
     var body = document.body, 
         isSupported = null;
     if (document.createElement && 
@@ -331,6 +331,26 @@ SOFTWARE.
   features.IS_STRICT_MODE_SUPPORTED = (features.__IS_STRICT_MODE_SUPPORTED = function(){
     "use strict";
     return !this;
+  })();
+  
+  features.IS_ACTIVEX_ENABLED = (features.__IS_ACTIVEX_ENABLED = function(){
+    if (typeof ActiveXObject == 'undefined') return null;
+    var xmlVersions = [ 
+      'Microsoft.XMLHTTP', 
+      'Msxml2.XMLHTTP.3.0', 
+      'Msxml2.XMLHTTP.4.0', 
+      'Msxml2.XMLHTTP.5.0', 
+      'Msxml2.XMLHTTP.6.0' 
+    ];
+    for (var i = xmlVersions.length; i--; ) {
+      try {
+        if (new ActiveXObject(xmlVersions[i])) {
+          return true;
+        }
+      } 
+      catch(ex) { }
+    }
+    return false;
   })();
   
   // BUGGIES
@@ -677,7 +697,7 @@ SOFTWARE.
     if (document.createElement) {
       var el = document.createElement('div');
       if (el && el.querySelectorAll) {
-        el.innerHTML = '<object><param></param></object>';
+        el.innerHTML = '<object><param name=""></object>';
         isBuggy = el.querySelectorAll("param").length != 1;
       }
       el = null;
