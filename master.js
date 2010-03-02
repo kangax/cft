@@ -151,6 +151,4 @@
       break;
     }
   }
-  
-  window.scrollTo(0,0);
 })();

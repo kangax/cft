@@ -156,8 +156,6 @@ SOFTWARE.
     if (document.createElement) {
       var el = document.createElement('div');
       if (el && el.style) {
-        el.style.width = '1px';
-        el.style.height = '1px';
         el.style.position = 'fixed';
         el.style.top = '10px';
         var root = document.body;
@@ -168,7 +166,6 @@ SOFTWARE.
           isSupported = (el.offsetTop === 10);
           root.removeChild(el);
         }
-        el = null;
       }
     }
     return isSupported;
@@ -183,7 +180,6 @@ SOFTWARE.
         el.setAttribute('oncontextmenu', '');
         isPresent = (typeof el.oncontextmenu != 'undefined');
       }
-      el = null;
     }
     return isPresent;
   })();
@@ -226,7 +222,6 @@ SOFTWARE.
           result = false;
         }
       }
-      el = null;
     }
     return result;
   })();
@@ -263,7 +258,6 @@ SOFTWARE.
         el.children[0] &&
         el.children[0].tagName &&
         el.children[0].tagName.toUpperCase() === 'DIV');
-      el = docEl = null;
     }
     return isSupported;
   })();
@@ -286,25 +280,25 @@ SOFTWARE.
     return isSupported;
   })();
   
-  features.IS_DOMFOCUSIN_SUPPORTED = (features.__IS_DOMFOCUSIN_SUPPORTED = function(){
-    var body = document.body,
-        isSupported = null;
-    if (document.createElement && 
-        body && 
-        body.appendChild && 
-        body.removeChild) {
-      var el = document.createElement('DIV');
-      if (el && el.addEventListener && el.focus) {
-        isSupported = false;
-        el.addEventListener('DOMFocusIn', function(){ isSupported = true; }, false);
-        el.tabIndex = -1;
-        body.appendChild(el);
-        el.focus();
-        body.removeChild(el);
-      }
-    }
-    return isSupported;
-  })();
+  // features.IS_DOMFOCUSIN_SUPPORTED = (features.__IS_DOMFOCUSIN_SUPPORTED = function(){
+  //     var body = document.body,
+  //         isSupported = null;
+  //     if (document.createElement && 
+  //         body && 
+  //         body.insertBefore && 
+  //         body.removeChild) {
+  //       var el = document.createElement('DIV');
+  //       if (el && el.addEventListener && el.focus) {
+  //         isSupported = false;
+  //         el.addEventListener('DOMFocusIn', function(){ isSupported = true; }, false);
+  //         el.tabIndex = -1;
+  //         body.insertBefore(el, body.firstChild);
+  //         el.focus();
+  //         body.removeChild(el);
+  //       }
+  //     }
+  //     return isSupported;
+  //   })();
   
   features.IS_QUIRKS_MODE = (features.__IS_QUIRKS_MODE = function(){
     if (document.createElement) {
@@ -375,7 +369,6 @@ SOFTWARE.
         if (all.length) {
           var lastNode = el.getElementsByTagName('*')[1];
           var buggy = !!(lastNode && lastNode.nodeType === 8);
-          el = lastNode = null;
           return buggy;
         }
       }
@@ -387,9 +380,9 @@ SOFTWARE.
   // http://msdn.microsoft.com/en-us/library/ms536389.aspx
   bugs.SETATTRIBUTE_IGNORES_NAME_ATTRIBUTE = (bugs.__SETATTRIBUTE_IGNORES_NAME_ATTRIBUTE = function(){
     if (document.createElement) {
-      var elForm = document.createElement('form');
-      var elInput = document.createElement('input');
-      var root = document.documentElement;
+      var elForm = document.createElement('form'),
+          elInput = document.createElement('input'),
+          root = document.documentElement;
       if (elForm && 
           elInput && 
           elInput.setAttribute && 
@@ -403,7 +396,6 @@ SOFTWARE.
         root.appendChild(elForm);
         var isBuggy = elForm.elements ? (typeof elForm.elements['test'] == 'undefined') : null;
         root.removeChild(elForm);
-        elForm = elInput = null;
         return isBuggy;
       }
     }
@@ -653,7 +645,6 @@ SOFTWARE.
         docEl.appendChild(el);
         isBuggy = document.getElementsByName(uid)[0] === el;
         docEl.removeChild(el);
-        el = null;
       } 
     }
     
