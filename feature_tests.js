@@ -152,23 +152,33 @@ SOFTWARE.
   })();
   
   features.IS_POSITION_FIXED_SUPPORTED = (features.__IS_POSITION_FIXED_SUPPORTED = function(){
-    var isSupported = null;
-    if (document.createElement) {
+    var container = document.body;
+    
+    if (document.createElement && container && container.appendChild && container.removeChild) {
       var el = document.createElement('div');
-      if (el && el.style) {
-        el.style.position = 'fixed';
-        el.style.top = '10px';
-        var root = document.body;
-        if (root && 
-            root.appendChild && 
-            root.removeChild) {
-          root.appendChild(el);
-          isSupported = (el.offsetTop === 10);
-          root.removeChild(el);
-        }
-      }
+      
+      if (!el.getBoundingClientRect) return null;
+          
+      el.innerHTML = 'x';
+      el.style.cssText = 'position:fixed;top:100px;';
+      container.appendChild(el);
+
+      var originalHeight = container.style.height,
+          originalScrollTop = container.scrollTop;
+
+      container.style.height = '3000px';
+      container.scrollTop = 500;
+
+      var elementTop = el.getBoundingClientRect().top;
+      container.style.height = originalHeight;
+      
+      var isSupported = (elementTop === 100);
+      container.removeChild(el);
+      container.scrollTop = originalScrollTop;
+
+      return isSupported;
     }
-    return isSupported;
+    return null;
   })();
   
   // Thanks to David Mark for suggestion
