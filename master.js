@@ -107,16 +107,16 @@
     var target = ('target' in e) ? e.target : e.srcElement;
     
     if (target && /^a$/i.test(target.nodeName)) {
-      if (target.className === 'show-test-code') {
+      if ((' ' + target.className + ' ').indexOf(' show-test-code ') > -1) {
         toggleCodeSection(target);
       }
-      else if (target.className === 'show-all') {
+      else if ((' ' + target.className + ' ').indexOf(' show-all ') > -1) {
         var all = document.getElementsByClassName('show-test-code');
         for (var i=0, len=all.length; i<len; i++) {
           toggleCodeSection(all[i], 'show');
         }
       }
-      else if (target.className === 'hide-all') {
+      else if ((' ' + target.className + ' ').indexOf(' hide-all ') > -1) {
         var all = document.getElementsByClassName('show-test-code');
         for (var i=0, len=all.length; i<len; i++) {
           toggleCodeSection(all[i], 'hide');
