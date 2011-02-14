@@ -357,6 +357,22 @@ SOFTWARE.
     return false;
   })();
   
+  features.IS_MATCHESSELECTOR_SUPPORTED = (features.__IS_MATCHESSELECTOR_SUPPORTED = function(){
+    var docEl = document.documentElement, prefixes = 'Khtml O Ms Webkit Moz'.split(' '), method = 'MatchesSelector';
+    if (docEl) {
+      for (var i = prefixes.length; i--; ) {
+        if (docEl[prefixes[i] + method]) {
+          return true;
+        }
+        if (docEl[prefixes[i].toLowerCase() + method]) {
+          return true;
+        }
+      }
+      return docEl[method.charAt(0).toLowerCase() + method.slice(1)];
+    }
+    return null;
+  })();
+  
   // BUGGIES
   
   // Safari returns "function" as typeof HTMLCollection
