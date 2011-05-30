@@ -32,8 +32,13 @@ SOFTWARE.
   features.IS_CSS_TRANSFORMATION_SUPPORTED = (features.__IS_CSS_TRANSFORMATION_SUPPORTED = function(){
     var docEl = document.documentElement, s;
     if (docEl && (s = docEl.style)) {
-      return (typeof s.WebkitTransform == 'string'
-        || typeof s.MozTransform == 'string');
+      return (
+        typeof s.WebkitTransform == 'string' || 
+        typeof s.MozTransform == 'string' ||
+        typeof s.OTransform == 'string' ||
+        typeof s.MsTransform == 'string' ||
+        typeof s.transform == 'string'
+      );
     }
     return null;
   })();
