@@ -1,1 +1,3 @@
-Common Feature Tests (CFT) aims to provide a convenient set of feature tests (duh!) for Javascript (and JScript). It eliminates a need for browser sniffing, providing a much more robust way to work around environment quirks. None of the tests require presence of `document.body` and so can be run at any time. A "live" version is at http://yura.thinkweb2.com/cft/
+Common Feature Tests (CFT) aims to provide a convenient set of feature tests (duh!) for Javascript (and JScript). It eliminates a need for browser sniffing, providing a much more robust way to work around environment quirks. None of the tests require presence of `document.body` and so can be run at any time.
+
+A "live" version is at http://kangax.github.io/cft/
