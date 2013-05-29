@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+<body>
+	<h1>Position Fixed Test</h1> (http://kangax.github.com/cft/#IS_POSITION_FIXED_SUPPORTED)
+	<script>
+		function detectFixedPosition(){
+		  var container = document.body;
+
+		  if (document.createElement && container && container.appendChild && container.removeChild) {
+			var el = document.createElement('div');
+
+			if (!el.getBoundingClientRect) return null;
+
+			el.innerHTML = 'x';
+			el.style.cssText = 'position:fixed;top:100px;';
+			container.appendChild(el);
+
+			var originalHeight = container.style.height,
+				originalScrollTop = container.scrollTop;
+
+			container.style.height = '3000px';
+			container.scrollTop = 500;
+
+			var elementTop = el.getBoundingClientRect().top;
+			container.style.height = originalHeight;
+
+			var isSupported = (elementTop === 100);
+			container.removeChild(el);
+			container.scrollTop = originalScrollTop;
+
+			return isSupported;
+		  }
+		  return null;
+		}
+		function detectFixedPositionFixed(){
+			var isSupported = null;
+			var container = document.body;
+			if (document.createElement &&
+			container && container.appendChild && container.removeChild) {
+				var el = document.createElement("div");
+				if (!el.getBoundingClientRect) {
+					return null;
+				}
+				el.innerHTML = "x";
+				el.style.cssText = "position:fixed;top:100px;-webkit-overflow-scrolling:touch;";
+				container.appendChild(el);
+				var originalHeight = container.style.height, originalScrollTop = container.scrollTop;
+				container.style.height = "3000px";
+				container.scrollTop = 500; // won't work on mobile safari
+				var elementTop = el.getBoundingClientRect().top;
+				isSupported = ((container.scrollTop === 500 && elementTop === 100) || // most modern browsers 
+								   el.style.cssText.indexOf('scrolling') != -1); // ios 5 beta
+				// alert(elementTop);
+				container.removeChild(el);
+				container.style.height = originalHeight;
+				container.scrollTop = originalScrollTop;
+			}
+			return isSupported;
+		}
+		alert(detectFixedPositionFixed());
+	</script>
+</body>
+</html>
+		

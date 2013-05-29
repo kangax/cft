@@ -158,21 +158,26 @@ SOFTWARE.
   
   features.IS_POSITION_FIXED_SUPPORTED = (features.__IS_POSITION_FIXED_SUPPORTED = function(){
     var isSupported = null;
-    if (document.createElement) {
-      var el = document.createElement('div');
-      if (el && el.style) {
-        el.style.position = 'fixed';
-        el.style.top = '10px';
-        var root = document.body;
-        if (root && 
-            root.appendChild && 
-            root.removeChild) {
-          root.appendChild(el);
-          isSupported = (el.offsetTop === 10);
-          root.removeChild(el);
-        }
-      }
-    }
+    var container = document.body;
+		if (document.createElement && container && container.appendChild && container.removeChild) {
+			var el = document.createElement("div");
+			if (!el.getBoundingClientRect) {
+				return null;
+			}
+			el.innerHTML = "x";
+			el.style.cssText = "position:fixed;top:100px;-webkit-overflow-scrolling:touch;";
+			container.appendChild(el);
+			var originalHeight = container.style.height, originalScrollTop = container.scrollTop;
+			container.style.height = "3000px";
+			container.scrollTop = 500;
+			var elementTop = el.getBoundingClientRect().top;
+			var isSupported = ((container.scrollTop === 500 && elementTop === 100) || // most modern browsers 
+							   el.style.cssText.indexOf('scrolling') != -1); // ios 5
+
+			container.removeChild(el);
+			container.style.height = originalHeight;
+			container.scrollTop = originalScrollTop;
+		}
     return isSupported;
   })();
   
