@@ -170,6 +170,13 @@ SOFTWARE.
 
       var originalHeight = container.style.height,
           originalScrollTop = container.scrollTop;
+      // In IE<=7, the window's upper-left is at 2,2 (pixels) with respect to the true client.
+      // surprisely, in IE8, the window's upper-left is at -2, -2 (pixels), but other elements
+      // tested is just right, so we need adjust this.
+      // https://groups.google.com/forum/?fromgroups#!topic/comp.lang.javascript/zWJaFM5gMIQ
+      // https://bugzilla.mozilla.org/show_bug.cgi?id=174397
+      var extraTop  = document.documentElement.getBoundingClientRect().top;
+      extraTop = extraTop > 0 ? extraTop : 0;
 
       container.style.height = '3000px';
       container.scrollTop = 500;
@@ -177,7 +184,7 @@ SOFTWARE.
       var elementTop = el.getBoundingClientRect().top;
       container.style.height = originalHeight;
       
-      var isSupported = (elementTop === 100);
+      var isSupported = (elementTop - extraTop) === 100;
       container.removeChild(el);
       container.scrollTop = originalScrollTop;
 
